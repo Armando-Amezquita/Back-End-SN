@@ -12,4 +12,6 @@ const { postPublicaciones, UpdatePost } =require('../controllers/post.controller
 router.post('/create', postPublicaciones)
 // router.delete('/delete/:id', deleteUser)
 router.put('/update', UpdatePost)
+
+
 module.exports = router

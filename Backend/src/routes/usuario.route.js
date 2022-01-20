@@ -1,22 +1,20 @@
-const { Router } =require('express');
+const { Router } = require('express');
 const router = Router();
 
 //controller
-const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, getApiInfo,getName } =require('../controllers/usuario.controller')
+const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, login } =require('../controllers/usuario.controller')
 
 
 //routes
-router.get('/all', usersAll)
-router.get('/name/:name', userByName)
-router.get('/byId/:id', userById)
-router.post('/create', postUser)
-router.delete('/delete/:id || :name', deleteUser)
-router.put('/update/:id', Updateuser)
-router.get('/pokemon', getApiInfo)
-
-
-router.get('/pokemonName/:id', getName)
-
+router.get('/login', login);
+router.get('/', usersAll);
+// router.get('/userName/:userName', userByNameAndById);
+router.get('/:name', userByName);
+router.get('/Id/:id', userById);
+router.post('/', postUser); 
+// router.delete('/:id || :name', deleteUser)
+router.delete('/:id', deleteUser);
+router.put('/:id', Updateuser)
 
 
 module.exports = router

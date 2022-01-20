@@ -8,7 +8,7 @@ const postRoute =require('./post.route')
 
 //USO DE RUTAS
 
-server.use('/usuario', usuarioRoute)
+server.use('/usuarios', usuarioRoute)
 server.use('/publicaciones', postRoute)
 
 module.exports = server

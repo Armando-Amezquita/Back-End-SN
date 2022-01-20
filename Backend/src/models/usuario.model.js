@@ -4,6 +4,7 @@ const Usuario = new Schema({
   name:  String,
   LastName: String,
   birthday:   String,
+  password: String,
   social_networks: [
             { name: String, 
               link: String 
