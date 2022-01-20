@@ -1,18 +1,51 @@
 const usuario =require('../models/usuario.model')
+const axios = require('axios')
+
+
+const getApiInfo = async (req, res)=>{
+  try {
+    const getApi = await axios('https://pokeapi.co/api/v2/pokemon')
+    const getData = getApi.data.results
+    const pokemonMap = getData.map(el =>{
+      return{
+        id: el.url.split('/')[6],
+        name: el.name,
+        url: el.url
+      }
+    })
+   return pokemonMap
+    
+  } catch (error) {
+    console.log(error)
+    res.json('fallo la peticion')
+  }
+}
+const getName = async (req, res)=>{
+  const { id } = req.params
+   try {
+    const todaLaData = await getApiInfo()
+   
+    const resultBusqueda = todaLaData.filter(el=>el.id == id)
+   resultBusqueda.length ? res.json(resultBusqueda) : res.json('no se tiene al pokemon')
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const usersAll = async (req, res, next) =>{
+  req.params, req.query, req.boby
   try {
     const total = await usuario.find({})
     res.status(200).json(total)
   } catch (error) {
-    
+    next(error)
   }
 }
 
 const userByName = async (req, res, next) => {
 try {
-  const { name } = req.params
-  const resulta =  await usuario.find({ name: name} ).exec();
+  const { pokemon } = req.params
+  const resulta =  await usuario.find({ name: pokemon} ).exec();
   resulta.length?
   res.json(resulta):
   res.json({message:'no se encontro el usuario'})
@@ -20,7 +53,6 @@ try {
   console.error(error)
 }  
 };
-
 const userById = async (req, res, next)=>{
   try {
     const { id } = req.params
@@ -77,4 +109,4 @@ res.status(200).json({message:"se ha modificado exitosamente  el usuario:",resul
     console.error(error)
   }
 }
-module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser };
+module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser, getApiInfo,getName };
