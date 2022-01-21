@@ -1,5 +1,4 @@
-const mongoose  = require('mongoose');
-const usuario =require('../models/usuario.model');
+const usuario = require('../models/usuario.model');
 
 
 const usersAll = async (req, res, next) =>{
@@ -27,30 +26,6 @@ const usersAll = async (req, res, next) =>{
 //       res.json('Contraseña incorrecta')
 //     }
 //   }
-
-// }
-
-// const userByNameAndById = async(req, res) => {
-//   const { id } = req.params;
-//   console.log('id', id)
-//   // const { name } = req.params
-//   // console.log('name',name)
-//   try {
-//     // if(name){
-//     //   const userByName = await usuario.find({name}).exec();
-//     //   userByName? res.json(userByName) : res.json({message: 'No se encontro un usuario con ese nombre', status: 500});
-//     // }
-//       if(id){
-//         const userById = await usuario.findById(id).exec();
-//         userById? res.json(userById) : res.json({message: 'No se encontro un usuario con ese ID', status: 500});  
-        
-//     // const users = await usuario.findById(id).exec()
-//       }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
 
 const userByName = async (req, res) => {
   let { name } = req.params;
@@ -88,32 +63,6 @@ const postUser = async (req, res) => {
   }
 };
 
-// const deleteUser = async (req, res) =>{
-//   /* const post = await usuarios.deleteOne(
-//         {
-//             _id: mongoose.Types.ObjectId("61e8901fbd70a0f87ba750e1")
-//         }
-//     )
-//     console.log(post) */
-//     const { id } = req.params;
-//     const userId = await usuario.findById(id).exec()
-//     if(userId) {
-//       usuario.deleteOne(
-//         {
-//           _id: mongoose.Types.ObjectId(userId)
-//         })
-//       res.json({ message:"Se ha eliminado exitosamente  el usuario:", userId });
-//     }else{
-//       res.json({message:"No existe un usuario con dicho ID"});
-//     }
-// }
-/* const post = await usuarios.deleteOne(
-
-      {
-          _id: mongoose.Types.ObjectId("61e8901fbd70a0f87ba750e1")
-      }
-  )
-  console.log(post) */
 const deleteUser = async (req, res) =>{
     const { id } = req.params;
     const userId = await usuario.findById(id)
@@ -124,20 +73,24 @@ const deleteUser = async (req, res) =>{
       res.json({message:"No existe un usuario con dicho ID"});
     }
 }
-const Updateuser = async (req,res) =>{
+const Updateuser = async (req, res, next) =>{
   try {
     const { id } = req.params
     const user = await usuario.findById(id)
   if (user) {
     const { name, birthday, email, lastName} = req.body
-    await usuario.updateOne({ id, name, birthday, email, lastName })
-    const resulFinal = await usuario.findById(id)
-  res.status(200).json({message:"se ha modificado exitosamente  el usuario:",resulFinal })
+    user.name = name
+    user.lastName = lastName
+    user.birthday = birthday
+    user.email = email
+    await user.save()
+    res.status(200).json({message:"se ha modificado exitosamente  el usuario:", data:user })
   }else{
     res.status(200).json({message:"no se tiene informacion del usuario"})
   }    
   } catch (error) {
     console.error(error)
+    next(error)
   }
 }
 
