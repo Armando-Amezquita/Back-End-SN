@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const usuarios= new Schema({
   name:  String,
-  lastName: String,
+  lastname: String,
   birthday:   String,
   social_networks: [
             { name: String, 
