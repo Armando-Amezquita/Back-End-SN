@@ -1,6 +1,7 @@
 const post =require('../models/post.model');
+require("./usuario.controller")
 const jwt = require('jsonwebtoken');
-const { Mongoose } = require('mongoose');
+const { mongoose } = require('mongoose');
 
 const postAdd = async (req, res, next) =>{
     const {token, image, title, category, comentarios, description, options, fecha_creacion, fecha_modificacion, like,tags} = req.body
@@ -37,7 +38,7 @@ const postPublicaciones = async (req, res, next) => {
         options:options,
         like:like,
         tags:tags,
-        autor: autor
+        autor:autor
       })
     await newpost.save()
       res.json({message:"hola se ha ingresado nuevo Usuario"});
@@ -53,4 +54,23 @@ const postPublicaciones = async (req, res, next) => {
     }
     )
   }
-  module.exports = { postPublicaciones, UpdatePost };
+
+  const publicacionesXusuario = async (req, res) =>{
+    const resultado = await post.aggregate(
+    [
+      {
+        $lookup:
+        {
+          from: "usuarios",
+          localField:"autor",
+          foreignField:"_id",
+          as:"usuariosAutor"
+        }
+      },
+      { $unwind: "$usuariosAutor"},
+      { $match: {usuariosAutor:"61e7cd45a3a6c48bb0fb3ec8"}}
+    ])
+    res.json(resultado)
+  }
+
+  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario };
