@@ -2,7 +2,7 @@ const { Router } =require('express');
 const router = Router();
 
 //controller
-const { postPublicaciones, UpdatePost } =require('../controllers/post.controller')
+const { postPublicaciones, UpdatePost, publicacionesXusuario } =require('../controllers/post.controller')
 
 
 //routes
@@ -12,6 +12,6 @@ const { postPublicaciones, UpdatePost } =require('../controllers/post.controller
 router.post('/create', postPublicaciones)
 // router.delete('/delete/:id', deleteUser)
 router.put('/update', UpdatePost)
-
+router.get('/varios', publicacionesXusuario)
 
 module.exports = router
