@@ -19,7 +19,8 @@ const postAdd = async (req, res, next) =>{
 }
 
 const postPublicaciones = async (req, res, next) => {
-    const {image,
+    const {
+        image,
         title,
         category,
         comentarios,
