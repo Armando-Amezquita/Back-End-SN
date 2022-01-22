@@ -1,7 +1,9 @@
 const post =require('../models/post.model');
+const usuario =require('../models/usuario.model')
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const { mongoose } = require('mongoose');
+const res = require('express/lib/response');
 
 const postAdd = async (req, res, next) =>{
     const {token, image, title, category, comentarios, description, options, fecha_creacion, fecha_modificacion, like,tags} = req.body
@@ -57,6 +59,7 @@ const postPublicaciones = async (req, res, next) => {
   }
 
   const publicacionesXusuario = async (req, res) =>{
+    const { idS } = req.params
     const resultado = await post.aggregate(
     [
       {
@@ -69,9 +72,36 @@ const postPublicaciones = async (req, res, next) => {
         }
       },
       { $unwind: "$usuariosAutor"},
-      { $match: {usuariosAutor:"61e7cd45a3a6c48bb0fb3ec8"}}
+      { $match: {usuariosAutor:idS}}
     ])
+    
+    res.json(resultado) 
+  }
+  const listaPelis = async (req, res) =>{
+    const resultado = await usuario.aggregate(
+      [
+        {
+          $lookup:
+          {
+            from: "post",
+            let:{
+              aliasNombreCategoria: "$title"
+            }, 
+            pipeline:[
+              {
+                $match:{
+                  $expr:{
+                    $in:["$$aliasNombreCategoria", "$autor"]
+                  }
+                }
+              }
+            ], 
+            as:"listas"
+          }
+        }
+      ]
+    )
     res.json(resultado)
   }
 
-  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario };
+  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, listaPelis };

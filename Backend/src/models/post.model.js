@@ -1,6 +1,6 @@
 const { Schema, model, Mongoose } = require('mongoose');
 
-const Post = new Schema(
+const post = new Schema(
     {
     image:{ type:String},
     title: {type:String},
@@ -18,6 +18,6 @@ const Post = new Schema(
     timestamps: true
 });
 
-module.exports = model('post', Post)
+module.exports = model('post', post)
 
 // ['codigo Js', 'Codigo' ]
