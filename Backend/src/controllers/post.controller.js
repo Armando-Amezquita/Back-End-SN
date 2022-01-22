@@ -77,4 +77,4 @@ const postPublicaciones = async (req, res, next) => {
     res.json(resultado)
   }
 
-  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario };
+module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario };
