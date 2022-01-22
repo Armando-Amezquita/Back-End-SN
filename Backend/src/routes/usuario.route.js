@@ -29,7 +29,7 @@ router.post('/auth', async(req, res, next)=>{
             }
         }
         if(user){
-            const token = jwt.sign({id:user._id}, process.env.SECRET_KEY, {expiresIn="1d"})
+            const token = jwt.sign({id:user._id}, process.env.SECRET_KEY, {expiresIn:"1d"})
             return res.json({message: `Se ha generado el token para ${user.name}`, data: token})
         }
         res.json({message: "El usuario no existe"})
