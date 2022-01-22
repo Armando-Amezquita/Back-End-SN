@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const usuario = require('../models/usuario.model');
 
 const usersAll = async (req, res, next) => {
@@ -87,7 +88,7 @@ const Updateuser = async (req, res, next) => {
 			user.lastname = lastname;
 			user.birthday = birthday;
 			user.email = email;
-      user.profile = profile
+			user.profile = profile;
 			await user.save();
 			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', data: user });
 		} else {
@@ -99,4 +100,28 @@ const Updateuser = async (req, res, next) => {
 	}
 };
 
-module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser };
+const authorization = async (req, res, next) => {
+	try {
+		const { id } = req.body;
+		const user = await usuario.findById(id);
+		if (req.query.token) {
+			try {
+				const verficacion = jwt.verify(req.query.token, process.env.SECRET_KEY);
+				return res.json({ ...verficacion, data: true });
+			} catch (error) {
+				console.log(error);
+				return res.json({ ...error, data: false });
+			}
+		}
+		if (user) {
+			const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+			return res.json({ message: `Se ha generado el token para ${user.name}`, data: token });
+		}
+		res.json({ message: 'El usuario no existe' });
+	} catch (error) {
+		console.log(error);
+		res.send(error);
+	}
+};
+
+module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization };
