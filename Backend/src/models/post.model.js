@@ -12,7 +12,11 @@ const post = new Schema(
     tags: { type: Array,
             default: [] 
         },
-    autor:{type: Schema.ObjectId}
+    autor:{type: Schema.ObjectId},
+    state: {
+        type: Boolean,
+        default: true
+    }
 },
 {
     timestamps: true

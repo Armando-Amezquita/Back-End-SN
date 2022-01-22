@@ -44,18 +44,21 @@ const postPublicaciones = async (req, res, next) => {
         autor:autor
       })
     await newpost.save()
-      res.json({message:"hola se ha ingresado nuevo Usuario"});
+      res.json({message:"Se creó la publicacion"});
     } catch (error) {
       console.error(error)
+      next(error)
     }
   };
   const UpdatePost = async (req, res)=>{
-    post.updateOne({
-      id:"61e7b2a1c495bb8d2888b1ef"
+    const {id} = req.body
+    await post.updateOne({
+      id
     },{
-      name:"modifique esta mierda desde aqui"
+      ...req.body.data
     }
     )
+    return res.json({message:"Se actualizó el post"})
   }
 
   const publicacionesXusuario = async (req, res) =>{
