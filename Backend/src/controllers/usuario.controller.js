@@ -42,7 +42,7 @@ const userById = async (req, res) => {
 	console.log(id);
 	try {
 		const userId = await usuario.findOne({id});
-		userId ? res.json(userId) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
+		userId ? res.json(userId) : res.json({ message: 'No se encontro un usuario con ese id', status: 500 });
 	} catch (error) {
 		console.error(error);
 	}
@@ -51,7 +51,7 @@ const userById = async (req, res) => {
 const postUser = async (req, res, next) => {
 	try {
 		const { id, fullname , birthday, email, profile } = req.body;
-		const isCreated = await usuario.findOne({ id });
+		const isCreated = await usuario.findOne({ id:id });
 		if (!isCreated) {
 			if (!id || !fullname || !email) {
 				res.json({ message: 'Se deben llenar todos los campos requeridos' });
