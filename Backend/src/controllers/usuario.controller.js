@@ -30,7 +30,7 @@ const usersAll = async (req, res, next) => {
 const userByName = async (req, res) => {
 	let { name } = req.params;
 	try {
-		const userName = await usuario.find({ name });
+		const userName = await usuario.find({ name: name.toLowerCase });
 		userName ? res.json(userName) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
@@ -50,13 +50,13 @@ const userById = async (req, res) => {
 
 const postUser = async (req, res, next) => {
 	try {
-		const { name, lastname, birthday, email, profile } = req.body;
-		const isCreated = await usuario.findOne({ email: email.toLowerCase() });
+		const { id, fullname , birthday, email, profile } = req.body;
+		const isCreated = await usuario.findOne({ id });
 		if (!isCreated) {
-			if (!name || !lastname || !email) {
+			if (!id || !fullname || !email) {
 				res.json({ message: 'Se deben llenar todos los campos requeridos' });
 			} else {
-				const newUsuario = await new usuario({ name, lastname, birthday, email: email.toLowerCase(), profile });
+				const newUsuario = await new usuario({ id, fullname, birthday, email: email.toLowerCase(), profile });
 				await newUsuario.save();
 				res.json({ message: 'Se ha registrado satisfactoriamente' });
 			}

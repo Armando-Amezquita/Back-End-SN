@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
 
 const usuarios= new Schema({
-  name:  String,
-  lastname: String,
+  id: String,
+  fullname:  String,
   birthday:   String,
   social_networks: [
             { name: String, 
