@@ -30,7 +30,7 @@ const usersAll = async (req, res, next) => {
 const userByName = async (req, res) => {
 	let { name } = req.params;
 	try {
-		const userName = await usuario.find({ name: name.toLowerCase });
+		const userName = await usuario.find({ fullname: name });
 		userName ? res.json(userName) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
