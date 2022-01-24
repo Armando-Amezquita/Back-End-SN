@@ -41,7 +41,7 @@ const userById = async (req, res) => {
 	const { id } = req.params;
 	console.log(id);
 	try {
-		const userId = await usuario.findById(id).exec();
+		const userId = await usuario.findOne({id});
 		userId ? res.json(userId) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
