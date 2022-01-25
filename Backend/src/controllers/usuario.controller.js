@@ -11,17 +11,37 @@ const usersAll = async (req, res, next) =>{
   }
 }
 
-
 const userByName = async (req, res) => {
 	let { name } = req.params;
+	let expresion = null;
+	if (name.includes(" ")) {
+		const result = name.split(" ")
+		expresion = new RegExp()
+	}else{
+		expresion = new RegExp("^["+name+"+]","i")
+		// expresion = new RegExp("^["+ name.charAt(0).toUpperCase()+name.slice(1).toLowerCase()+"|"+name+"+]")
+		
+	}
 	try {
-		const infoTotal = await usuario.find();
-    const result =  infoTotal.filter(e => e.fullname.toLowerCase().includes(name.toLowerCase()))
-    result ? res.json(result) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
+		const toto = await usuario.find({fullname:{$regex:expresion}});
+		// const toto = await usuario.aggregate([{$match:{fullname : name}}])
+    // const result =  infoTotal.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
+    toto ? res.json(toto) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
 	}
 };
+
+// const userByName = async (req, res) => {
+// 	let { name } = req.params;
+// 	try {
+// 		const infoTotal = await usuario.find();
+//     const result =  infoTotal.filter(e => e.fullname.toLowerCase().includes(name.toLowerCase()))
+//     result ? res.json(result) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// };
 
 const userById = async (req, res) => {
 	const { id } = req.params;
