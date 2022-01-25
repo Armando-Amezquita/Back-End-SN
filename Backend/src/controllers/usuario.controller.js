@@ -27,11 +27,13 @@ const usersAll = async (req, res, next) => {
 //     }
 //   }
 
+
 const userByName = async (req, res) => {
 	let { name } = req.params;
 	try {
-		const userName = await usuario.find({ fullname: name });
-		userName ? res.json(userName) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
+		const infoTotal = await usuario.find({})
+	const result =  infoTotal.filter(e => e.fullname.toLowerCase().includes(name.toLowerCase()))
+	result ? res.json(result) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
 	}
