@@ -1,5 +1,6 @@
+require('dotenv').config()
 const usuario = require('../models/usuario.model');
-
+const jwt = require('jsonwebtoken')
 
 const usersAll = async (req, res, next) =>{
   try {
@@ -43,10 +44,12 @@ const postUser = async (req, res, next) => {
 			} else {
 				const newUsuario = await new usuario({ 	id, fullname, birthday, email: email.toLowerCase(), profile, nacionalidad, cohorte, rol, description, background_picture });
 				await newUsuario.save();
-				res.json({ message: 'Se ha registrado satisfactoriamente' });
+				const token = jwt.sign({id:newUsuario.id}, process.env.SECRET_KEY, {expiresIn: '1d'})
+				res.json({ message: 'Se ha registrado satisfactoriamente', data:token});
 			}
 		} else {
-			return res.json({ message: 'El usuario ya existe' });
+			const token = jwt.sign({id:isCreated.id}, process.env.SECRET_KEY, {expiresIn: '1d'})
+			return res.json({ message: 'El usuario ya existe', data: token});
 		}
 	} catch (error) {
 		console.error(error);
@@ -70,15 +73,22 @@ const postUser = async (req, res, next) => {
 // };
 
 const deleteUser = async (req, res) =>{
-    const { id } = req.params;
-    const userId = await usuario.findOne(id)
-    if (userId) {
-      await usuario.deleteOne({id: userId})
-      res.json({ message:"Se ha eliminado exitosamente  el usuario:", userId });
-    }else{
-      res.json({message:"No existe un usuario con dicho ID"});
-    }
+	try {
+		
+		const { id } = req.params;
+		const userId = await usuario.findOne({id})
+		if (userId) {
+		  await usuario.deleteOne({id})
+		  res.json({ message:"Se ha eliminado exitosamente  el usuario:", userId });
+		}else{
+		  res.json({message:"No existe un usuario con dicho ID"});
+		}
+	} catch (error) {
+		res.send(error)
+	}
 }
+
+
 const Updateuser = async (req,res) =>{
   try {
     const { id } = req.params
@@ -96,4 +106,28 @@ const Updateuser = async (req,res) =>{
   }
 }
 
-module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser };
+const authorization = async (req, res, next) => {
+	try {
+		const { id } = req.body;
+		const user = await usuario.findById(id);
+		if (req.query.token) {
+			try {
+				const verficacion = jwt.verify(req.query.token, process.env.SECRET_KEY);
+				return res.json({ ...verficacion, data: true });
+			} catch (error) {
+				console.log(error);
+				return res.json({ ...error, data: false });
+			}
+		}
+		if (user) {
+			const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+			return res.json({ message: `Se ha generado el token para ${user.name}`, data: token });
+		}
+		res.json({ message: 'El usuario no existe' });
+	} catch (error) {
+		console.log(error);
+		res.send(error);
+	}
+};
+
+module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser, authorization };

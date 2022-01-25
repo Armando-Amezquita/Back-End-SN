@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 //controller
-const { usersAll, userByName,userById, postUser, deleteUser, Updateuser,  } =require('../controllers/usuario.controller')
+const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, authorization } =require('../controllers/usuario.controller')
 
 
 //routes
