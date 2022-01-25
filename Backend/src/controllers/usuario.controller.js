@@ -181,7 +181,7 @@ const FollowMe = async (req, res, next)=>{
 	// 			"follow.followers":  flows
 	// 		}
 	// 	})
-		res.json("modificado")
+	
 	} catch (error) {
 		console.log(error)
 	}
