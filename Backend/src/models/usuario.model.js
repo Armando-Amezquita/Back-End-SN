@@ -5,7 +5,7 @@ const usuarios= new Schema({
   fullname: String,
   birthday: String,
   nacionalidad: {type: String},
-  Eliminar: {type: Boolean},
+  eliminar: {type: Boolean},
   cohorte: String,
   rol: String,
   description: String,
