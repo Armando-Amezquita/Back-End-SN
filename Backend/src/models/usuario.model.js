@@ -2,35 +2,42 @@ const { Schema, model } = require('mongoose');
 
 const usuarios= new Schema({
   id: String,
-  fullname:  String,
-  birthday:   String,
+  fullname: String,
+  birthday: String,
+  pais: [],
+  cohorte: String,
+  rol: String,
+  description: String,
+  background_picture: String,
   social_networks: [
-            { name: String, 
-              link: String 
-            }],
-  post: { type: Array,
-          default: [] 
+    { name: String, 
+      link: String 
+    }],
+    post: 
+      { type: Array,
+        default: [] 
+      },
+    follow: 
+      { followers:
+        {
+          type: Array,
+          default: []
         },
-  follow: { followers:
+        follows:
           {
             type: Array,
             default: []
-          } ,
-          follows:
-          {
-            type: Array,
-            default: []
-          } ,
-        },
-  
-  email:  String,
-  profile: {type:String,
-            default:'https://cdn1.vectorstock.com/i/thumb-large/05/85/programmer-vector-37610585.jpg'},
-  state: {
-          type:Boolean,
-          default:true
           },
-
+        },
+  email:  String,
+  profile: {
+    type:String,
+    default:'https://cdn1.vectorstock.com/i/thumb-large/05/85/programmer-vector-37610585.jpg'
+  },
+  state: {
+    type:Boolean,
+    default:true
+    },
 });
 
 module.exports = model('usuarios', usuarios)
