@@ -35,13 +35,13 @@ const userById = async (req, res) => {
 
 const postUser = async (req, res, next) => {
 	try {
-		const { id, fullname , birthday, email, profile } = req.body;
+		const { id, fullname , birthday, email, profile, nacionalidad, cohorte } = req.body;
 		const isCreated = await usuario.findOne({ id:id });
 		if (!isCreated) {
 			if (!id || !fullname || !email) {
 				res.json({ message: 'Se deben llenar todos los campos requeridos' });
 			} else {
-				const newUsuario = await new usuario({ id, fullname, birthday, email: email.toLowerCase(), profile });
+				const newUsuario = await new usuario({ id, fullname, birthday, email: email.toLowerCase(), profile, nacionalidad, cohorte });
 				await newUsuario.save();
 				res.json({ message: 'Se ha registrado satisfactoriamente' });
 			}

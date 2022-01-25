@@ -21,3 +21,4 @@ const Post = new Schema(
 module.exports = model('post', Post)
 
 // ['codigo Js', 'Codigo' ]
+// jadasafsd
