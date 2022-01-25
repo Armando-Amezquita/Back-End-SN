@@ -9,6 +9,7 @@ const usuarios= new Schema({
   rol: String,
   description: String,
   background_picture: String,
+  cualquiera: String,
   social_networks: [
     { name: String, 
       link: String 
