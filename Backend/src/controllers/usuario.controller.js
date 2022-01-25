@@ -71,7 +71,7 @@ const postUser = async (req, res, next) => {
 
 const deleteUser = async (req, res) =>{
     const { id } = req.params;
-    const userId = await usuario.findById(id)
+    const userId = await usuario.findOne(id)
     if (userId) {
       await usuario.deleteOne({id: userId})
       res.json({ message:"Se ha eliminado exitosamente  el usuario:", userId });

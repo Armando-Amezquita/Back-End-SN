@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const routes = require('./src/routes');
 const server = express();
+const cors = require('cors')
 server.name = 'API';
 
 require('./db');
@@ -10,7 +11,7 @@ server.use(express.json({ limit: '50mb' }));
 // server.use(cookieParser());
 
 server.use(morgan('dev'));
-
+server.use(cors())
 server.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
 	res.header('Access-Control-Allow-Credentials', 'true');
