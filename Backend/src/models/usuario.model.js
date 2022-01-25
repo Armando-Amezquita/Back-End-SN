@@ -6,9 +6,9 @@ const usuarios= new Schema({
   birthday: String,
   nacionalidad: [{type:String, default: ""}],
   cohorte: [{type:String, default: ""}],
-  rol: String,
-  description: String,
-  background_picture: String,
+  rol: [{type:String, default: ""}],
+  description: [{type:String, default: ""}],
+  background_picture: [{type:String, default: ""}],
   cualquiera: String,
   // hola
   social_networks: [
