@@ -108,7 +108,6 @@ const deleteUser = async (req, res) =>{
 	}
 }
 
-
 const Updateuser = async (req,res) =>{
   try {
     const { id } = req.params
@@ -150,4 +149,41 @@ const authorization = async (req, res, next) => {
 	}
 };
 
-module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser, authorization };
+const FollowMe = async (req, res, next)=>{
+	const { id } = req.params
+	const { followMe } = req.body
+ 	try {
+		 let message=""
+		// const { id } = jwt.verify(token,process.env.SECRET_KEY)
+		 const myself = await usuario.findOne({id})
+		 const user = await usuario.findOne({id:followMe})
+		 if (user) {
+
+			 if (user.follow.followers.includes(id)) {
+				 message=`dejaste de seguir a ${user.fullname}`
+				 user.follow.followers.splice(user.follow.followers.indexOf(id),1)
+				 myself.follow.follows.splice(user.follow.followers.indexOf(followMe),1)
+			 }else{
+				message=`seguiste a ${user.fullname}`
+				 user.follow.followers.push(id)
+				 myself.follow.follows.push(followMe)
+			 }
+			 await user.save()
+			 await myself.save()
+			 res.json({message})
+		 }else{
+			 res.json({message:"No existe el usuario"})
+		 }
+		 
+    // await usuario.updateOne({_id:id},
+	// 	{
+	// 		$push:{
+	// 			"follow.followers":  flows
+	// 		}
+	// 	})
+		res.json("modificado")
+	} catch (error) {
+		console.log(error)
+	}
+}
+module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser, authorization, FollowMe };
