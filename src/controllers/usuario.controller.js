@@ -16,6 +16,18 @@ const usersAll = async (req, res, next) => {
 			const myself = await usuario.findOne({id: id})
 			users = users.filter((e) => !myself.follow.follows.includes(e.id));
 		}
+		if(req.query.follows==='true'){
+			const myself = await usuario.findOne({id: id})
+			users = users.filter((e) => myself.follow.follows.includes(e.id));
+		}
+		if(req.query.followers==='true'){
+			const myself = await usuario.findOne({id: id})
+			users = users.filter((e) => myself.follow.followers.includes(e.id));
+		}
+		if(req.query.followers==='false'){
+			const myself = await usuario.findOne({id: id})
+			users = users.filter((e) => !myself.follow.followers.includes(e.id));
+		}
 		res.json(users);
 	} catch (error) {
 		res.send(error)
