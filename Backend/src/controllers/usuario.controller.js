@@ -134,18 +134,18 @@ const deleteUser = async (req, res) => {
 
 const Updateuser = async (req, res) => {
 	try {
-		const { id } = req.params;
-		const user = await usuario.findById(id);
+		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
+		const user = await usuario.findOne({id});
 		if (user) {
-			const { name, birthday, email, lastName } = req.body;
-			await usuario.updateOne({ id, name, birthday, email, lastName });
-			const resulFinal = await usuario.findById(id);
+			const { fullname, birthday, description, nacionalidad, cohorte } = req.body;
+			await usuario.updateOne({id},{ fullname, birthday, lastName, description, nacionalidad, cohorte });
+			const resulFinal = await usuario.findOne({id});
 			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', resulFinal });
 		} else {
 			res.status(200).json({ message: 'no se tiene informacion del usuario' });
 		}
 	} catch (error) {
-		console.error(error);
+		res.send(error);
 	}
 };
 

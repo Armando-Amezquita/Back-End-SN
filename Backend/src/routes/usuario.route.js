@@ -9,12 +9,12 @@ const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, authori
 //routes
 // router.get('/login', login);
 router.get('/', isAuth, usersAll);
-router.get('/:name', userByName);
-router.get('/Id/:id', userById);
-router.post('/', postUser); 
-router.delete('/:id', deleteUser);
-router.put('/:id', Updateuser)
-router.put('/follow/:id', FollowMe)
+router.get('/:name', isAuth, userByName);
+router.get('/Id/:id', isAuth, userById);
+router.post('/', isAuth, postUser); 
+router.delete('/:id', isAuth, deleteUser);
+router.put('/:id', isAuth, Updateuser)
+router.put('/follow/:id', isAuth, FollowMe)
 
 
 
