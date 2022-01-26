@@ -23,7 +23,6 @@ const postPublicaciones = async (req, res, next) => {
         image,
         title,
         category,
-        comentarios,
         description,
         options,
         like,

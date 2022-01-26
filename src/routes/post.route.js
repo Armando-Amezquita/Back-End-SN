@@ -9,7 +9,7 @@ const { postPublicaciones, UpdatePost, publicacionesXusuario } =require('../cont
 // router.get('/all', usersAll)
 // router.get('/name/:name', userByName)
 // router.get('/byId/:id', userById)
-router.post('/create', postPublicaciones)
+router.post('/', postPublicaciones)
 // router.delete('/delete/:id', deleteUser)
 router.put('/update', UpdatePost)
 router.get('/varios', publicacionesXusuario)
