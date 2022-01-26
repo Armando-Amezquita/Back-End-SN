@@ -4,13 +4,12 @@ const usuarios= new Schema({
   id: String,
   fullname: String,
   birthday: String,
-  nacionalidad: [{type:String, default: ""}],
+  nacionalidad: {type:String, default: ""},
   cohorte: [{type:String, default: ""}],
-  rol: [{type:String, default: ""}],
-  description: [{type:String, default: ""}],
+  rol: {type:String, default: ""},
+  description: {type:String, default: ""},
   background_picture: [{type:String, default: ""}],
   cualquiera: String,
-  // hola
   social_networks: [
     { name: String, 
       link: String 
