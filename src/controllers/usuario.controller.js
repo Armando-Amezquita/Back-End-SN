@@ -6,6 +6,9 @@ const usersAll = async (req, res, next) => {
 	try {
 		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
 		let users = await usuario.find();
+		if(req.query.myself==='true'){
+			users = users.filter((e) => e.id === id);
+		}
 		if (req.query.myself === 'false') {
 			users = users.filter((e) => e.id !== id);
 		}
