@@ -24,26 +24,22 @@ const postPublicaciones = async (req, res, next) => {
         title,
         category,
         description,
-        options,
-        like,
-        tags,
-      autor} = req.body
+        tags,} = req.body
+      const {token} = req.headers
     try {
+      const {id} = jwt.verify(token, process.env.SECRET_KEY)
       const newpost =  new post ({
-        image:image,
-        title:title,
-        category:category,
-        comentarios:comentarios,
-        description:description,
-        options:options,
-        like:like,
+        image,
+        title,
+        category,
+        description,
         tags:tags,
-        autor:autor
+        autor:id
       })
     await newpost.save()
-      res.json({message:"hola se ha ingresado nuevo Usuario"});
+      res.json({message:"Se ha publicado correctamente"});
     } catch (error) {
-      console.error(error)
+      res.send(error)
     }
   };
   const UpdatePost = async (req, res)=>{
