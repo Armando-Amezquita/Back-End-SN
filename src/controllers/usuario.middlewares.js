@@ -1,8 +1,16 @@
+require('dotenv').config()
+const jwt = require("jsonwebtoken");
+
 const isAuth = (req, res, next)=>{
     try {
         const {token} = req.headers;
         if(token){
-            next()
+            const isValid = jwt.verify(token, process.env.SECRET_KEY)
+            if(isValid){
+                next()
+            }else{
+
+            }
         }else{
             return res.json({message: "no estas autorizado para acceder a esta informacion", auth:false})
         }
