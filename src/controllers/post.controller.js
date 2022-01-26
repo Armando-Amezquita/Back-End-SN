@@ -4,7 +4,7 @@ require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const { mongoose } = require('mongoose');
 
-const getPosts = (req, res, next)=>{
+const getPosts = async(req, res, next)=>{
   try {
     const allPost = await post.find()
     res.send({message: 'Estos son todos los posts', data: allPost})
