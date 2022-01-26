@@ -3,7 +3,7 @@ const router = Router();
 
 //controller
 const {isAuth} = require('../controllers/usuario.middlewares')
-const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, authorization, FollowMe } =require('../controllers/usuario.controller')
+const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe } =require('../controllers/usuario.controller')
 
 
 //routes
