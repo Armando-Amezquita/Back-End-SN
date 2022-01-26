@@ -1,5 +1,5 @@
 const express =require ('express');
-const server = express();
+const server = express();   
 
 //IMPORTACION DE RUTAS
 const usuarioRoute =require('./usuario.route')
