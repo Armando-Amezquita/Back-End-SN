@@ -12,6 +12,10 @@ const usersAll = async (req, res, next) => {
 		if (req.query.myself === 'false') {
 			users = users.filter((e) => e.id !== id);
 		}
+		if(req.query.suggestions==='true'){
+			const myself = usuario.findOne({id})
+			users = users.filter((e) => !myself.follow.follows.includes(e));
+		}
 		res.json(users);
 	} catch (error) {
 		res.send(error)
