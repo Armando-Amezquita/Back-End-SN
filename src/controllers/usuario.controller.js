@@ -14,7 +14,7 @@ const usersAll = async (req, res, next) => {
 		}
 		if(req.query.suggestions==='true'){
 			console.log(req.query.suggestions)
-			const myself = usuario.findOne({id})
+			const myself = await usuario.findOne({id})
 			users = users.filter((e) => !myself.follow.follows.includes(e));
 		}
 		res.json(users);
