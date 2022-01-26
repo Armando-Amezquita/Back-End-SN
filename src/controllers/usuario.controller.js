@@ -156,10 +156,10 @@ const Updateuser = async (req, res) => {
 		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
 		const user = await usuario.findOne({id});
 		if (user) {
-			const { fullname, birthday, description, nacionalidad, cohorte } = req.body;
-			await usuario.updateOne({id},{ fullname, birthday, lastName, description, nacionalidad, cohorte });
+			const { background_picture, profile, fullname, birthday, description, nacionalidad } = req.body;
+			await usuario.updateOne({id},{ background_picture, profile, fullname, birthday, lastName, description, nacionalidad });
 			const resulFinal = await usuario.findOne({id});
-			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', resulFinal });
+			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', data:resulFinal });
 		} else {
 			res.status(200).json({ message: 'no se tiene informacion del usuario' });
 		}
