@@ -9,7 +9,7 @@ const isAuth = (req, res, next)=>{
             if(isValid){
                 next()
             }else{
-
+                console.log(false)
             }
         }else{
             return res.json({message: "no estas autorizado para acceder a esta informacion", auth:false})
