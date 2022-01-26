@@ -1,7 +1,19 @@
+require('dotenv').config()
 const post =require('../models/post.model');
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const { mongoose } = require('mongoose');
+
+const getPosts = (req, res, next)=>{
+  try {
+    const allPost = await post.find()
+    res.send({message: 'Estos son todos los posts', data: allPost})
+  } catch (error) {
+    res.send(error)
+  }
+}
+
+
 
 const postAdd = async (req, res, next) =>{
     const {token, image, title, category, comentarios, description, options, fecha_creacion, fecha_modificacion, like,tags} = req.body
@@ -69,4 +81,4 @@ const postPublicaciones = async (req, res, next) => {
     res.json(resultado)
   }
 
-  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario };
+  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts };
