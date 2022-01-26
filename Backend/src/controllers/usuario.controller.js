@@ -11,6 +11,7 @@ const usersAll = async (req, res, next) => {
 		}
 		res.json(users);
 	} catch (error) {
+		res.send(error)
 		next(error);
 	}
 };
