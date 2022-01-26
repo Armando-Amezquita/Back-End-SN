@@ -11,17 +11,37 @@ const usersAll = async (req, res, next) =>{
   }
 }
 
-
 const userByName = async (req, res) => {
 	let { name } = req.params;
+	let expresion = null;
+	if (name.includes(" ")) {
+		const result = name.split(" ")
+		expresion = new RegExp()
+	}else{
+		expresion = new RegExp("^["+name+"+]","i")
+		// expresion = new RegExp("^["+ name.charAt(0).toUpperCase()+name.slice(1).toLowerCase()+"|"+name+"+]")
+		
+	}
 	try {
-		const infoTotal = await usuario.find();
-    const result =  infoTotal.filter(e => e.fullname.toLowerCase().includes(name.toLowerCase()))
-    result ? res.json(result) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
+		const toto = await usuario.find({fullname:{$regex:expresion}});
+		// const toto = await usuario.aggregate([{$match:{fullname : name}}])
+    // const result =  infoTotal.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
+    toto ? res.json(toto) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
 	}
 };
+
+// const userByName = async (req, res) => {
+// 	let { name } = req.params;
+// 	try {
+// 		const infoTotal = await usuario.find();
+//     const result =  infoTotal.filter(e => e.fullname.toLowerCase().includes(name.toLowerCase()))
+//     result ? res.json(result) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// };
 
 const userById = async (req, res) => {
 	const { id } = req.params;
@@ -87,7 +107,6 @@ const deleteUser = async (req, res) =>{
 	}
 }
 
-
 const Updateuser = async (req,res) =>{
   try {
     const { id } = req.params
@@ -129,4 +148,41 @@ const authorization = async (req, res, next) => {
 	}
 };
 
-module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser, authorization };
+const FollowMe = async (req, res, next)=>{
+	const { id } = req.params
+	const { followMe } = req.body
+ 	try {
+		 let message=""
+		// const { id } = jwt.verify(token,process.env.SECRET_KEY)
+		 const myself = await usuario.findOne({id})
+		 const user = await usuario.findOne({id:followMe})
+		 if (user) {
+
+			 if (user.follow.followers.includes(id)) {
+				 message=`dejaste de seguir a ${user.fullname}`
+				 user.follow.followers.splice(user.follow.followers.indexOf(id),1)
+				 myself.follow.follows.splice(user.follow.followers.indexOf(followMe),1)
+			 }else{
+				message=`seguiste a ${user.fullname}`
+				 user.follow.followers.push(id)
+				 myself.follow.follows.push(followMe)
+			 }
+			 await user.save()
+			 await myself.save()
+			 res.json({message})
+		 }else{
+			 res.json({message:"No existe el usuario"})
+		 }
+		 
+    // await usuario.updateOne({_id:id},
+	// 	{
+	// 		$push:{
+	// 			"follow.followers":  flows
+	// 		}
+	// 	})
+	
+	} catch (error) {
+		console.log(error)
+	}
+}
+module.exports = { usersAll, userByName, userById, postUser,deleteUser, Updateuser, authorization, FollowMe };
