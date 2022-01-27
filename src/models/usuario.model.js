@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const usuarios= new Schema({
   id: String,
   fullname: String,
-  birthday: String,
+  birthday: {type:String, default:""},
   nacionalidad: {type:String, default: ""},
   cohorte: [{type:String, default: ""}],
   rol: {type:String, default: ""},
