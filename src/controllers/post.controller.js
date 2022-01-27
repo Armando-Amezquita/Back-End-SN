@@ -2,19 +2,21 @@ require('dotenv').config()
 const post =require('../models/post.model');
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
-const { mongoose } = require('mongoose');
 const usuarioModel = require('../models/usuario.model');
 
 const getPosts = async(req, res, next)=>{
   try {
     let allPost = await post.find()
-    for(post of allPost){
-      const user = await usuarioModel.findOne({id: post.autor});
-      post.autor = {
-        id: user.id,
-        profile: user.profile,
-        fullname: user.fullname
-      }
+    let newAuthor = {}
+    for(let post of allPost){
+    const user = await usuarioModel.findOne({id: post.autor});
+    newAuthor = {
+      id: user.id + 11111,
+      profile: user.profile,
+      fullname: user.fullname
+    }
+    post.autor = JSON.stringify(newAuthor)
+    console.log(post.autor)
     }
     res.send({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {

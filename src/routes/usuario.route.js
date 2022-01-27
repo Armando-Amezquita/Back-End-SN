@@ -14,7 +14,7 @@ router.get('/Id/:id', isAuth, userById);
 router.post('/', postUser); 
 router.delete('/:id', isAuth, deleteUser);
 router.put('/', isAuth, Updateuser)
-router.put('/follow/', isAuth, FollowMe)
+router.put('/follow', isAuth, FollowMe)
 
 
 
