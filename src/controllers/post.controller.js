@@ -8,15 +8,14 @@ const usuarioModel = require('../models/usuario.model');
 const getPosts = async(req, res, next)=>{
   try {
     let allPost = await post.find()
-    allPost=allPost.map(e=>{
-      const user = await usuarioModel.findOne({id: e.autor});
-      e.autor = {
+    for(post of allPost){
+      const user = await usuarioModel.findOne({id: post.autor});
+      post.autor = {
         id: user.id,
         profile: user.profile,
         fullname: user.fullname
       }
-      return e
-    }) 
+    }
     res.send({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
     res.send(error)
