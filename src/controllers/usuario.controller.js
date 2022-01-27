@@ -2,7 +2,7 @@ require('dotenv').config();
 const usuario = require('../models/usuario.model');
 const multer = require('multer')
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
+
 
 const usersAll = async (req, res, next) => {
 	let message=""
@@ -166,9 +166,12 @@ const deleteUser = async (req, res) => {
 
 const Updateuser = async (req, res) => {
 	try {
+
+		
 			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
-			const profile = req.file.path;
-		console.log(profile)
+			
+			const profile = (process.env.URL_PERFIL+req.file.path)
+	console.log("--->",profile)
 		const user = await usuario.findOne({id});
 		if (user) {
 			const { background_picture,  fullname, birthday, description, nacionalidad } = req.body;
