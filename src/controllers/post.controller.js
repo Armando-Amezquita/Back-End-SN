@@ -3,10 +3,19 @@ const post =require('../models/post.model');
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const { mongoose } = require('mongoose');
+const usuarioModel = require('../models/usuario.model');
 
 const getPosts = async(req, res, next)=>{
   try {
-    const allPost = await post.find()
+    let allPost = await post.find()
+    allPost=allPost.map(e=>{
+      const user = usuarioModel.findOne({id: e.autor});
+      e.autor = {
+        id: user.id,
+        profile: user.profile,
+        fullname: user.fullname
+      }
+    }) 
     res.send({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
     res.send(error)
