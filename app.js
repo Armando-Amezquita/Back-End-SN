@@ -11,6 +11,7 @@ require('./db');
 server.use(express.urlencoded({ extended: false, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
 // server.use(cookieParser());
+server.use(express.static("./uploads"))
 
 
 //MANEJO DE ERRORES

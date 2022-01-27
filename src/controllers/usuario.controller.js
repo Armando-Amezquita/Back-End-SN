@@ -1,7 +1,8 @@
 require('dotenv').config();
 const usuario = require('../models/usuario.model');
+const multer = require('multer')
 const jwt = require('jsonwebtoken');
-const {checkList} = require('../fake-data/fakelist')
+const fs = require('fs');
 
 const usersAll = async (req, res, next) => {
 	let message=""
@@ -165,10 +166,12 @@ const deleteUser = async (req, res) => {
 
 const Updateuser = async (req, res) => {
 	try {
-		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
+			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
+			const profile = req.file.path;
+		console.log(profile)
 		const user = await usuario.findOne({id});
 		if (user) {
-			const { background_picture, profile, fullname, birthday, description, nacionalidad } = req.body;
+			const { background_picture,  fullname, birthday, description, nacionalidad } = req.body;
 			await usuario.updateOne({id},{ background_picture, profile, fullname, birthday, description, nacionalidad });
 			const resulFinal = await usuario.findOne({id});
 			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', data:resulFinal });
@@ -239,4 +242,17 @@ const FollowMe = async (req, res, next) => {
 		console.log(error);
 	}
 };
-module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe };
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'uploads')
+    },
+    filename: function(req, file, cb){
+
+        const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
+        cb(null, `${id}_profile.jpg`)
+    }
+})
+const uploadF = multer({storage:storage})
+const uploadI = uploadF.single('profile')
+module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe , uploadI};
