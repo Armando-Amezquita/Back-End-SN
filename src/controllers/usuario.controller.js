@@ -115,12 +115,18 @@ const postUser = async (req, res, next) => {
 					state: checkList(email)?true:false
 				});
 				await newUsuario.save();
-				const token = jwt.sign({ id: newUsuario.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
-				res.json({ message: 'Se ha registrado satisfactoriamente', data: token });
+				if(checkList(email)){
+					const token = jwt.sign({ id: newUsuario.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+					return res.json({ message: 'Se ha registrado satisfactoriamente', data: token });
+				}
+				res.json({message: "usted no pertence a HENRY", data: false})
 			}
 		} else {
-			const token = jwt.sign({ id: isCreated.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
-			return res.json({ message: 'El usuario ya existe', data: token });
+			if(checkList(email)){
+				const token = jwt.sign({ id: isCreated.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+				return res.json({ message: 'El usuario ya existe', data: token });
+			}
+			res.json({message: "usted no pertence a HENRY", data: false})
 		}
 	} catch (error) {
 		console.error(error);
