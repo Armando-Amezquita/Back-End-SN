@@ -1,15 +1,18 @@
 const list = [
     ['edwinm.leonb@gmail.com', 'FT19B'],
+    ['jhoanburbano@unicauca.edu.co', 'FT19A']
 ]
 
 const checkList = (email)=>{
+    let ret = null
     list.forEach(e=>{
         if(e[0].toLowerCase() === email.toLowerCase()){
-            return e[1]
+            ret = e[1]
         }else{
-            return false;
+            ret = false;
         }
     })
+    return ret
 }
 module.exports = {
     checkList

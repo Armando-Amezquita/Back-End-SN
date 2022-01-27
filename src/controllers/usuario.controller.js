@@ -99,7 +99,7 @@ const postUser = async (req, res, next) => {
 		const isCreated = await usuario.findOne({ id: id });
 		if (!isCreated) {
 			if (!id || !fullname || !email) {
-				res.json({ message: 'Se deben llenar todos los campos requeridos' });
+				return res.json({ message: 'Se deben llenar todos los campos requeridos' });
 			} else {
 				const newUsuario = await new usuario({
 					id,
@@ -119,17 +119,17 @@ const postUser = async (req, res, next) => {
 					const token = jwt.sign({ id: newUsuario.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
 					return res.json({ message: 'Se ha registrado satisfactoriamente', data: token });
 				}
-				res.json({message: "usted no pertence a HENRY", data: false})
+				return res.json({message: "usted no pertence a HENRY", data: false})
 			}
 		} else {
 			if(checkList(email)){
 				const token = jwt.sign({ id: isCreated.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
 				return res.json({ message: 'El usuario ya existe', data: token });
 			}
-			res.json({message: "usted no pertence a HENRY", data: false})
+			return res.json({message: "usted no pertence a HENRY", data: false})
 		}
 	} catch (error) {
-		console.error(error);
+		res.send(error);
 	}
 };
 
@@ -168,7 +168,6 @@ const Updateuser = async (req, res) => {
 		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
 		const user = await usuario.findOne({id});
 		if (user) {
-			console.log(user)
 			const { background_picture, profile, fullname, birthday, description, nacionalidad } = req.body;
 			await usuario.updateOne({id},{ background_picture, profile, fullname, birthday, description, nacionalidad });
 			const resulFinal = await usuario.findOne({id});
