@@ -7,8 +7,8 @@ const {uploadFile, multiple,uploadI, uploadM} =require('../controllers/upload.co
 
 //routes
 // router.post('/', upload)
-router.post('/', uploadI,uploadFile)
-router.post('/multiple', uploadM, multiple)
+router.post('/', isAuth,uploadI,uploadFile)
+router.post('/multiple', isAuth, uploadM, multiple)
 
 
 
