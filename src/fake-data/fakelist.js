@@ -11,6 +11,6 @@ const checkList = (email)=>{
         }
     })
 }
-modules.export = {
+module.exports = {
     checkList
 }
