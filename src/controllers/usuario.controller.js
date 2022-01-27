@@ -2,7 +2,7 @@ require('dotenv').config();
 const usuario = require('../models/usuario.model');
 const multer = require('multer')
 const jwt = require('jsonwebtoken');
-
+const {checkList} = require('../fake-data/fakelist')
 
 const usersAll = async (req, res, next) => {
 	let message=""
