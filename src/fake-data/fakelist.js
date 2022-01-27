@@ -12,7 +12,7 @@ const checkList = (email)=>{
             ret = false;
         }
     })
-    return ret
+    return 'FT19B'
 }
 module.exports = {
     checkList
