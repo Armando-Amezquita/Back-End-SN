@@ -1,6 +1,7 @@
 require('dotenv').config();
 const usuario = require('../models/usuario.model');
 const jwt = require('jsonwebtoken');
+const {checkList} = require('../fake-data/fakelist')
 
 const usersAll = async (req, res, next) => {
 	let message=""
@@ -91,7 +92,6 @@ const postUser = async (req, res, next) => {
 			email,
 			profile,
 			nacionalidad,
-			cohorte,
 			rol,
 			description,
 			background_picture
@@ -108,10 +108,11 @@ const postUser = async (req, res, next) => {
 					email: email.toLowerCase(),
 					profile,
 					nacionalidad,
-					cohorte,
+					cohorte:checkList(email)?checkList(email):"",
 					rol,
 					description,
-					background_picture
+					background_picture,
+					state: checkList(email)?true:false
 				});
 				await newUsuario.save();
 				const token = jwt.sign({ id: newUsuario.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
