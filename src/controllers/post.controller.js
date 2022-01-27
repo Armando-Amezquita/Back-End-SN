@@ -15,6 +15,7 @@ const getPosts = async(req, res, next)=>{
         profile: user.profile,
         fullname: user.fullname
       }
+      return e
     }) 
     res.send({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
