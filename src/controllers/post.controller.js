@@ -9,7 +9,7 @@ const getPosts = async(req, res, next)=>{
   try {
     let allPost = await post.find()
     allPost=allPost.map(e=>{
-      const user = usuarioModel.findOne({id: e.autor});
+      const user = await usuarioModel.findOne({id: e.autor});
       e.autor = {
         id: user.id,
         profile: user.profile,
