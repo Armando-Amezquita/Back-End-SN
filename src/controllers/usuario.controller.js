@@ -193,7 +193,6 @@ const authorization = async (req, res, next) => {
 };
 
 const FollowMe = async (req, res, next) => {
-	// const { id } = req.params;
 	const { followMe } = req.body;
 	const {token} = req.headers;
 	try {
