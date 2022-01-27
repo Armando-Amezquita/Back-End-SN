@@ -194,21 +194,21 @@ const authorization = async (req, res, next) => {
 
 const FollowMe = async (req, res, next) => {
 	const { id } = req.params;
-	const { followMe } = req.body;
+	const { follow } = req.body;
 	try {
 		let message = '';
 		// const { id } = jwt.verify(token,process.env.SECRET_KEY)
 		const myself = await usuario.findOne({ id });
-		const user = await usuario.findOne({ id: followMe });
+		const user = await usuario.findOne({ id: follow });
 		if (user) {
 			if (user.follow.followers.includes(id)) {
 				message = `dejaste de seguir a ${user.fullname}`;
 				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
+				myself.follow.follows.splice(user.follow.followers.indexOf(follow), 1);
 			} else {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
-				myself.follow.follows.push(followMe);
+				myself.follow.follows.push(follow);
 			}
 			await user.save();
 			await myself.save();
