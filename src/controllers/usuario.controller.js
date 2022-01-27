@@ -12,7 +12,7 @@ const usersAll = async (req, res, next) => {
 		if (req.query.myself === 'false') {
 			users = users.filter((e) => e.id !== id);
 		}
-		if(req.query.follows==='false'){
+		if(req.query.follows==='true'){
 			const myself = await usuario.findOne({id: id})
 			users = users.filter((e) => !myself.follow.follows.includes(e.id));
 		}
@@ -193,22 +193,23 @@ const authorization = async (req, res, next) => {
 };
 
 const FollowMe = async (req, res, next) => {
-	const { id } = req.params;
-	const { follow } = req.body;
+	// const { id } = req.params;
+	const { followMe } = req.body;
+	const {token} = req.headers;
 	try {
 		let message = '';
-		// const { id } = jwt.verify(token,process.env.SECRET_KEY)
+		const { id } = jwt.verify(token,process.env.SECRET_KEY)
 		const myself = await usuario.findOne({ id });
-		const user = await usuario.findOne({ id: follow });
+		const user = await usuario.findOne({ id: followMe });
 		if (user) {
 			if (user.follow.followers.includes(id)) {
 				message = `dejaste de seguir a ${user.fullname}`;
 				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.followers.indexOf(follow), 1);
+				myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
 			} else {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
-				myself.follow.follows.push(follow);
+				myself.follow.follows.push(followMe);
 			}
 			await user.save();
 			await myself.save();
