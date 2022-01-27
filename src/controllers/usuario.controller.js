@@ -3,6 +3,7 @@ const usuario = require('../models/usuario.model');
 const jwt = require('jsonwebtoken');
 
 const usersAll = async (req, res, next) => {
+	let message=""
 	try {
 		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
 		let users = await usuario.find();
@@ -15,20 +16,24 @@ const usersAll = async (req, res, next) => {
 		if(req.query.follows==='false'){
 			const myself = await usuario.findOne({id: id})
 			users = users.filter((e) => !myself.follow.follows.includes(e.id));
+			message += users.length?"Estas son las personas no sigues":"Sigues a todos"
 		}
 		if(req.query.follows==='true'){
 			const myself = await usuario.findOne({id: id})
 			users = users.filter((e) => myself.follow.follows.includes(e.id));
+			message += users.length?"Estas son las personas que sigues":"Aun no sigues a nadie"
 		}
 		if(req.query.followers==='true'){
 			const myself = await usuario.findOne({id: id})
 			users = users.filter((e) => myself.follow.followers.includes(e.id));
+			message += users.length?"Estas son las personas que te siguen":"Aun no tienes seguidores"
 		}
 		if(req.query.followers==='false'){
 			const myself = await usuario.findOne({id: id})
 			users = users.filter((e) => !myself.follow.followers.includes(e.id));
+			message += users.length?"Estas son las personas que aun no te siguen":"Eres muy popular"
 		}
-		res.json(users);
+		res.json({message, data:users});
 	} catch (error) {
 		res.send(error)
 		next(error);
