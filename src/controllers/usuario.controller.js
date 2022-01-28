@@ -82,8 +82,7 @@ const userById = async (req, res) => {
 		if(id===payload.id)return res.json(null);
 		if(req.query.follow==='true'){
 			const myfollow = await usuario.findOne({id}, {follow:1})
-			console.log(myfollow)
-			return res.json({msg:'sisasmiperro'})
+			return res.json({myfollow})
 		}
 		const userId = await usuario.findOne({ id });
 		userId ? res.json(userId) : res.json({ message: 'No se encontro un usuario con ese id', status: 500 });
