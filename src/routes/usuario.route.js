@@ -11,6 +11,7 @@ const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowM
 router.get('/', isAuth, usersAll);
 router.get('/:name', isAuth, userByName);
 router.get('/Id/:id', isAuth, userById);
+router.get('/Id/', isAuth, userById);
 router.post('/', postUser); 
 router.delete('/:id', isAuth, deleteUser);
 router.put('/', isAuth,uploadI, Updateuser)
