@@ -81,8 +81,25 @@ const userById = async (req, res) => {
 		const payload = jwt.verify(token,process.env.SECRET_KEY)
 		if(id===payload.id)return res.json(null);
 		if(req.query.follow==='true'){
-			const myfollow = await usuario.findOne({id}, {follow:1})
-			return res.json({myfollow})
+			const {follow:{followers, follows}} = await usuario.findOne({id}, {follow:1})
+			console.log(follows, followers)
+			let response = {
+				follows: [],
+				followers:[]
+			}
+			if(follows.length){
+				for(id_ of follows){
+					let user = await usuario.findOne({id:id_},{fullname:1, profile:1, cohorte:1, email:1, id:1}) 
+					response.follows.push(user)
+				}
+			}
+			if(followers.length){
+				for(id_ of followers){
+				let user = await usuario.findOne({id:id_},{fullname:1, profile:1, cohorte:1, email:1, id:1}) 
+				response.followers.push(user)
+			}
+		}
+			return res.json(response)
 		}
 		const userId = await usuario.findOne({ id });
 		userId ? res.json(userId) : res.json({ message: 'No se encontro un usuario con ese id', status: 500 });
