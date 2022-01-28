@@ -9,6 +9,7 @@ const usersAll = async (req, res, next) => {
 	try {
 		const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
 		let users = await usuario.find();
+
 		if(req.query.myself==='true'){
 			users = users.filter((e) => e.id === id);
 		}
@@ -75,8 +76,12 @@ const userByName = async (req, res) => {
 
 const userById = async (req, res) => {
 	const { id } = req.params;
-	console.log(id);
 	try {
+		if(req.query.follow==='true'){
+			const follow = await usuario.findOne({id})
+			console.log(follow)
+			return res.json({msg:'sisasmiperro'})
+		}
 		const userId = await usuario.findOne({ id });
 		userId ? res.json(userId) : res.json({ message: 'No se encontro un usuario con ese id', status: 500 });
 	} catch (error) {
