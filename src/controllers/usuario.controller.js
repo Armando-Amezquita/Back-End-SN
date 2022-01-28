@@ -76,10 +76,13 @@ const userByName = async (req, res) => {
 
 const userById = async (req, res) => {
 	const { id } = req.params;
+	const { token } = req.headers;
 	try {
+		const payload = jwt.verify(token,proccess.env.SECRET_KEY)
+		if(id===payload.id)return res.json(null);
 		if(req.query.follow==='true'){
-			const follow = await usuario.findOne({id})
-			console.log(follow)
+			const myfollow = await usuario.findOne({id}, {follow:1})
+			console.log(myfollow)
 			return res.json({msg:'sisasmiperro'})
 		}
 		const userId = await usuario.findOne({ id });
