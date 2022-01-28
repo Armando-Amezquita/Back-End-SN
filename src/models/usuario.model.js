@@ -9,6 +9,7 @@ const usuarios= new Schema({
   rol: {type:String, default: ""},
   description: {type:String, default: ""},
   background_picture: {type:String, default: ""},
+  notifications: {type: Array, default: []},
   social_networks: [
     { name: String, 
       link: String 

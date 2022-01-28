@@ -204,6 +204,89 @@ const authorization = async (req, res, next) => {
 	}
 };
 
+// Limite de notificaciones. eliminar notificacionesl.
+// Seguidres de un amigo. 
+//Comentario debe llevar el id de la persona para ver el comentsario
+const notificationFollow = async (req,res) => {
+	const { followMe } = req.body;
+	const { token } = req.headers;
+	const { id } = jwt.verify(token, process.env.SECRET_KEY);
+	const mySelf = await usuario.findById({ id });
+	const userFollow = await usuario.findById({ id: followMe });
+	switch (type) {
+		case comment:
+			const messageCommentData = {
+				message: `${mySelf.fullname} te hizo un comentario`,
+				id: mySelf.Id,
+				fullname: mySelf.fullname,
+				profile:  mySelf.profile,
+				cohorte:  mySelf.cohorte
+			}
+			userFollow.notification.push(messageCommentData);
+			res.json(messageCommentData);
+
+		case like:
+			const messageLikeData = {
+				message: `${mySelf.fullname} le gusto tu publicación`,
+				id: mySelf.Id,
+				fullname: mySelf.fullname,
+				profile:  mySelf.profile,
+				cohorte:  mySelf.cohorte
+			}
+			userFollow.notification.push(messageLikeData);
+			res.json(messageLikeData);
+
+		case follow:
+			const messageFollowData = {
+				message: `${mySelf.fullname} te empezo a seguir`,
+				id: mySelf.Id,
+				fullname: mySelf.fullname,
+				profile:  mySelf.profile,
+				cohorte:  mySelf.cohorte
+			}
+			userFollow.notification.push(messageFollowData);
+			res.json(messageFollowData);
+			break;
+		default:
+			break;
+	}
+}
+
+//    
+
+/* const userData = {
+message: `ahora sigues/te sigue a ${myself/id}`
+user:{
+fullname: myself.fullname,
+profile: myself.profile,
+cohorte: myself.cohorte
+}
+	try {
+		const { id } = jwt.verify(token, process.env.SECRET_KEY);
+		if(userFollow){
+			const messageFollowerData = {
+				message: `Ahora te sigue ${mySelf.id}`,
+				id: mySelf.Id,
+				fullname: mySelf.fullname,
+				profile:  mySelf.profile,
+				cohorte:  mySelf.cohorte
+			}
+			const messageFollowMe = {
+				message: `Ahora sigues a sigue ${mySelf.id}`,
+				fullname:mySelf.fullname,
+				profile: mySelf.profile,
+				cohorte: mySelf.cohorte
+			}
+			mySelf.notification.push(messageFollowMe);
+			res.json(messageFollowerData);
+		}
+	} catch (error) {
+		console.log(error)
+	}
+} */
+
+
+
 const FollowMe = async (req, res, next) => {
 	const { followMe } = req.body;
 	const {token} = req.headers;
@@ -239,4 +322,7 @@ const FollowMe = async (req, res, next) => {
 		console.log(error);
 	}
 };
-module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe };
+
+
+
+module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe, notificationFollow };
