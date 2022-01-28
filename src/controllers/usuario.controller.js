@@ -235,88 +235,62 @@ const authorization = async (req, res, next) => {
 	}
 };
 
-// Limite de notificaciones. eliminar notificacionesl.
-// Seguidres de un amigo. 
-//Comentario debe llevar el id de la persona para ver el comentsario
-const notificationFollow = async (req,res) => {
-	const { followMe } = req.body;
-	const { token } = req.headers;
-	const { id } = jwt.verify(token, process.env.SECRET_KEY);
-	const mySelf = await usuario.findById({ id });
-	const userFollow = await usuario.findById({ id: followMe });
-	switch (type) {
-		case comment:
-			const messageCommentData = {
-				message: `${mySelf.fullname} te hizo un comentario`,
-				id: mySelf.Id,
-				fullname: mySelf.fullname,
-				profile:  mySelf.profile,
-				cohorte:  mySelf.cohorte
-			}
-			userFollow.notification.push(messageCommentData);
-			res.json(messageCommentData);
-
-		case like:
-			const messageLikeData = {
-				message: `${mySelf.fullname} le gusto tu publicación`,
-				id: mySelf.Id,
-				fullname: mySelf.fullname,
-				profile:  mySelf.profile,
-				cohorte:  mySelf.cohorte
-			}
-			userFollow.notification.push(messageLikeData);
-			res.json(messageLikeData);
-
-		case follow:
-			const messageFollowData = {
-				message: `${mySelf.fullname} te empezo a seguir`,
-				id: mySelf.Id,
-				fullname: mySelf.fullname,
-				profile:  mySelf.profile,
-				cohorte:  mySelf.cohorte
-			}
-			userFollow.notification.push(messageFollowData);
-			res.json(messageFollowData);
-			break;
-		default:
-			break;
-	}
-}
-
-//    
-
-/* const userData = {
-message: `ahora sigues/te sigue a ${myself/id}`
-user:{
-fullname: myself.fullname,
-profile: myself.profile,
-cohorte: myself.cohorte
-}
+const notification = async (idSeguido, idPropio, type) => {
+	// const { idSeguido } = req.body;
+	// const { idPropio } = jwt.verify(token, process.env.SECRET_KEY);
 	try {
-		const { id } = jwt.verify(token, process.env.SECRET_KEY);
-		if(userFollow){
-			const messageFollowerData = {
-				message: `Ahora te sigue ${mySelf.id}`,
-				id: mySelf.Id,
-				fullname: mySelf.fullname,
-				profile:  mySelf.profile,
-				cohorte:  mySelf.cohorte
-			}
-			const messageFollowMe = {
-				message: `Ahora sigues a sigue ${mySelf.id}`,
-				fullname:mySelf.fullname,
-				profile: mySelf.profile,
-				cohorte: mySelf.cohorte
-			}
-			mySelf.notification.push(messageFollowMe);
-			res.json(messageFollowerData);
+		const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
+		console.log(fullname) // Trae solo el nombre
+		const userFollow = await usuario.findOne({ id: idSeguido });
+		switch (type) {
+			case 'comment':
+				const messageCommentData = {
+					content: `te hizo un comentario`,
+					icon: 'uploads/Icons/like.svg',
+					name: fullname.split(' ')[0],
+				}
+				userFollow.notification.push(messageCommentData);
+			break;
+			case 'like':
+				const messageLikeData = {
+					content: `Le gusto un comentario tuyo`,
+					icon: 'uploads/Icons/like.svg',
+					name: fullname.split(' ')[0],
+				}
+				userFollow.notification.push(messageLikeData);
+			break;
+			case 'follow':
+				const messageFollowData = {
+					content: `te empezo a seguir`,
+					icon: 'uploads/Icons/like.svg',
+					name: fullname.split(' ')[0],
+				}
+				userFollow.notification.push(messageFollowData);
+				res.json(messageFollowData);
+				break;
+			default:
+				break;
 		}
+		await userFollow.save();
 	} catch (error) {
-		console.log(error)
+		console.log(error)	
 	}
-} */
+}
 
+// const notificationDelete = async (req,res) => {
+// 	const { id } = req.body;
+// 	const {token} = req.headers;
+// 	const id = jwt.verify(token,process.env.SECRET_KEY)
+// 	const myself = await usuario.findOne({ id });
+// 	if(myself.notification >= 0){
+// 		myself.notification.pop()
+// 		res.json({message: 'Se ha eliminado una notificación'});
+// 	}
+// 	else{
+// 		res.json({message: 'El usuario no tiene notificaciones'});
+// 	}
 
+// }
 
 const FollowMe = async (req, res, next) => {
 	const { followMe } = req.body;
@@ -335,6 +309,7 @@ const FollowMe = async (req, res, next) => {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
 				myself.follow.follows.push(followMe);
+				await notification(followMe, id, 'follow');
 			}
 			await user.save();
 			await myself.save();
@@ -366,4 +341,4 @@ const storage = multer.diskStorage({
 })
 const uploadF = multer({storage:storage})
 const uploadI = uploadF.single('profile')
-module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe , uploadI, notificationFollow};
+module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe , uploadI, notification};
