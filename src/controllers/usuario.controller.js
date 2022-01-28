@@ -177,9 +177,8 @@ const postUser = async (req, res, next) => {
 const deleteUser = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const userId = await usuario.findOne({ id: id });
+		const userId = await usuario.findOneAndDelete({ id: id });
 		if (userId) {
-			await usuario.deleteOne({ id });
 			res.json({ message: 'Se ha eliminado exitosamente  el usuario:', userId });
 		} else {
 			res.json({ message: 'No existe un usuario con dicho ID' });
