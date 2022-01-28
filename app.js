@@ -4,6 +4,7 @@ const routes = require('./src/routes');
 const server = express();
 const cors = require('cors')
 server.name = 'API';
+server.use('/static/', express.static('./uploads'));
 
 server.use(cors())
 

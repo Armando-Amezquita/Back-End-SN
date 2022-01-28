@@ -21,7 +21,8 @@ server.use((err, req, res, next) => {
 	console.error(err);
 	res.status(status).send(message);
 });
-
+// server.use(express.static("uploads"))
+server.use('/uploads/', express.static('./uploads'));
 //
 server.use('/', routes);
 
