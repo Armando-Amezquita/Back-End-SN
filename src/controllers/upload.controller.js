@@ -4,32 +4,33 @@ const jwt = require("jsonwebtoken");
 
 // const { token } = require('morgan');
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, 'uploads')
-    },
+const storageProfile = multer.diskStorage({
+    destination: function(req, file, cb){cb(null, 'uploads/Profile')},
     filename: function(req, file, cb){
-        console.log(req.headers.token)
         const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
         cb(null, `${id}_profile.jpg`)
-        
-        
-        // console.log("----->",toto)
-        // cb(null,`${id_prof}-${file.originalname}`)
     }
 })
-const uploadF = multer({storage:storage})
-const uploadI = uploadF.single('archive')
-const uploadM = uploadF.array('archive')
-
-const uploadFile =(req, res)=>{ 
-
-    res.json({message:"se ha subido el archivo"})
+const storagebackground_picture = multer.diskStorage({
+    destination: function(req, file, cb){cb(null, 'uploads/background_picture')},
+    filename: function(req, file, cb){
+        const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
+        cb(null, `${id}_background_picture.jpg`)
     }
-
-const multiple =(req, res)=>{
-    res.json({message:"se ha subido varios archivos"})
+})
+const storagePost = multer.diskStorage({
+    destination: function(req, file, cb){cb(null, 'uploads/Profile')},
+    filename: function(req, file, cb){
+        const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
+        cb(null, `${id}_post.jpg`)
     }
+})
+const uploadProfile = multer({storageProfile:storageProfile})
+const uploadbackground_picture = multer({storageProfile:storagebackground_picture})
+const uploadpost = multer({storageProfile:storagePost})
 
-module.exports ={ uploadI,
-    uploadM,  uploadFile, multiple}
+const uploadP = uploadProfile.single('profile')
+const uploadb = uploadbackground_picture.single('background_picture')
+const uploadpo = uploadpost.array('img_post')
+
+module.exports ={ uploadP, uploadb, uploadpo}

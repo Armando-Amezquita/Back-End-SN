@@ -11,6 +11,6 @@ const uploadRoute = require('./upload.route')
 
 server.use('/usuarios', usuarioRoute)
 server.use('/posts', postRoute)
-server.use('/upload', uploadRoute)
+
 
 module.exports = server
