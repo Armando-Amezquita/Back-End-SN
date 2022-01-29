@@ -6,18 +6,67 @@ const usuarioModel = require('../models/usuario.model');
 
 const   getPosts = async(req, res, next)=>{
   try {
-    let allPost = await post.find()
+    const {id} = jwt.verify(req.headers.token, process.env.SECRET_KEY)
+    let allPost = await post.aggregate([
+      {
+        $lookup:{
+          from: "usuarios",
+          let: {id_usuario: "$autor"},
+          pipeline: [
+            {
+              $unwind: "$id"
+            },
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$id", "$$id_usuario"]
+                }
+              }
+            }
+          ],
+          as: "autorData"
+        }
+      }
+    ]).sort({createdAt:-1})
+
     let newAuthor = {}
-    for(let post of allPost){
-    const user = await usuarioModel.findOne({id: post.autor});
-    newAuthor = {
-      id: user.id,
-      profile: user.profile,
-      fullname: user.fullname
-    }
-    post.autor = JSON.stringify(newAuthor)
-    }
-    res.send({message: 'Estos son todos los posts', data: allPost})
+    allPost=allPost.map(e=>{
+      if(e.autorData[0])
+      {newAuthor = {
+        fullname:e.autorData[0].fullname,
+        id:e.autorData[0].id,
+        cohorte:e.autorData[0].cohorte[0],
+        profile:e.autorData[0].profile,
+        email:e.autorData[0].email,
+      }
+      console.log(newAuthor, e.autorData[0].fullname)
+      e.autorData[0]={...newAuthor}}
+      return e
+    })
+    // for(let post of allPost){
+      //   const user = await usuarioModel.findOne({id: post.autor});
+    //   newAuthor = {
+      //     id: user.id,
+      //     profile: user.profile,
+      //     fullname: user.fullname
+      //   }
+      //   post.autor = JSON.stringify(newAuthor)
+      // }
+      // console.log(allPost, 'all')
+      if(req.query.myself==='false'){
+        allPost = allPost.filter(e=>e.author!==id)
+      }
+      if(req.query.myself==='true'){
+        allPost = allPost.filter(e=>e.author===id)
+      }
+      if(req.query.userid!==undefined){
+        allPost = allPost.filter(e=>e.author===req.query.userid)
+      }
+      if(req.query.follows==='true'){
+        const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
+        allPost = allPost.filter((e)=>follows.includes(e.autor))
+      }
+      res.json({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
     res.send(error)
   }
