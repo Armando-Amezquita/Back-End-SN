@@ -28,7 +28,6 @@ const   getPosts = async(req, res, next)=>{
         }
       }
     ]).sort({createdAt:-1})
-
     let newAuthor = {}
     allPost=allPost.map(e=>{
       e.autor=undefined
@@ -40,32 +39,31 @@ const   getPosts = async(req, res, next)=>{
         profile:e.autorData[0].profile,
         email:e.autorData[0].email,
       }
-      console.log(newAuthor, e.autorData[0].fullname)
       e.autorData[0]={...newAuthor}}
       return e
     })
     // for(let post of allPost){
       //   const user = await usuarioModel.findOne({id: post.autor});
-    //   newAuthor = {
-      //     id: user.id,
-      //     profile: user.profile,
-      //     fullname: user.fullname
-      //   }
+      //   newAuthor = {
+        //     id: user.id,
+        //     profile: user.profile,
+        //     fullname: user.fullname
+        //   }
       //   post.autor = JSON.stringify(newAuthor)
       // }
       // console.log(allPost, 'all')
       if(req.query.myself==='false'){
-        allPost = allPost.filter(e=>e.author!==id)
+        allPost = allPost.filter(e=>e.autorData[0].id!==id)
       }
       if(req.query.myself==='true'){
-        allPost = allPost.filter(e=>e.author===id)
+        allPost = allPost.filter(e=>e.autorData[0].id===id)
       }
       if(req.query.userid!==undefined){
-        allPost = allPost.filter(e=>e.author===req.query.userid)
+        allPost = allPost.filter(e=>e.autorData[0].id===req.query.userid)
       }
       if(req.query.follows==='true'){
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
-        allPost = allPost.filter((e)=>follows.includes(e.autor))
+        allPost = allPost.filter((e)=>follows.includes(e.autorData[0].id))
       }
       res.json({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
