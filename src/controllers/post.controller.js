@@ -31,6 +31,7 @@ const   getPosts = async(req, res, next)=>{
 
     let newAuthor = {}
     allPost=allPost.map(e=>{
+      e.autor=undefined
       if(e.autorData[0])
       {newAuthor = {
         fullname:e.autorData[0].fullname,
