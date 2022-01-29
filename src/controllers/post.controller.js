@@ -63,7 +63,7 @@ const   getPosts = async(req, res, next)=>{
       }
       if(req.query.follows==='true'){
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
-        allPost = allPost.filter((e)=>follows.includes(e.autorData[0].id))
+        allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
       res.json({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
