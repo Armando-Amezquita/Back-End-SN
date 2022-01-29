@@ -239,8 +239,8 @@ const notification = async (idSeguido, idPropio, type) => {
 	// const { idPropio } = jwt.verify(token, process.env.SECRET_KEY);
 	try {
 		const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
-		console.log(fullname) // Trae solo el nombre
 		const userFollow = await usuario.findOne({ id: idSeguido });
+		console.log(fullname, userFollow) // Trae solo el nombre
 		switch (type) {
 			case 'comment':
 				const messageCommentData = {
@@ -248,7 +248,7 @@ const notification = async (idSeguido, idPropio, type) => {
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notification.push(messageCommentData);
+				userFollow.notifications.push(messageCommentData);
 			break;
 			case 'like':
 				const messageLikeData = {
@@ -256,7 +256,7 @@ const notification = async (idSeguido, idPropio, type) => {
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notification.push(messageLikeData);
+				userFollow.notifications.push(messageLikeData);
 			break;
 			case 'follow':
 				const messageFollowData = {
@@ -264,8 +264,7 @@ const notification = async (idSeguido, idPropio, type) => {
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notification.push(messageFollowData);
-				res.json(messageFollowData);
+				userFollow.notifications.push(messageFollowData);
 				break;
 			default:
 				break;
