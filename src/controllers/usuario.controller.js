@@ -194,18 +194,32 @@ const deleteUser = async (req, res) => {
 
 const Updateuser = async (req, res) => {
 	try {
-
-		
 			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
-			
-			const profile = (process.env.URL_PERFIL+req.file.path)
-	console.log("--->",profile)
-		const user = await usuario.findOne({id});
-		if (user) {
 			const { background_picture,  fullname, birthday, description, nacionalidad } = req.body;
-			await usuario.updateOne({id},{ background_picture, profile, fullname, birthday, description, nacionalidad });
+		    const user = await usuario.findOne({id});
+		if (user) {
+			if (background_picture || profile || fullname || birthday || description || nacionalidad) {
+			await usuario.updateOne({id},{ background_picture, fullname, birthday, description, nacionalidad });
 			const resulFinal = await usuario.findOne({id});
 			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', data:resulFinal });
+			} 	
+		} else {
+			res.status(200).json({ message: 'no se tiene informacion del usuario' });
+		}
+	} catch (error) {
+		res.send(error);
+	}
+};
+const UpdateProfile = async (req, res) => {
+	try {
+			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
+			const profile = req.file.path
+				const user = await usuario.findOne({id});
+		if (user) {
+			await usuario.updateOne({id},{ profile });
+			const resulFinal = await usuario.findOne({id});
+			res.status(200).json({ message: 'se ha modificado exitosamente  el usuario:', data:resulFinal });
+			
 		} else {
 			res.status(200).json({ message: 'no se tiene informacion del usuario' });
 		}
@@ -343,4 +357,4 @@ const storage = multer.diskStorage({
 })
 const uploadF = multer({storage:storage})
 const uploadI = uploadF.single('profile')
-module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe , uploadI, notification};
+module.exports = { usersAll, userByName, userById, postUser, deleteUser, Updateuser, authorization, FollowMe , uploadI, notification, UpdateProfile};
