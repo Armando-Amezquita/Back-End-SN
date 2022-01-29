@@ -213,7 +213,7 @@ const Updateuser = async (req, res) => {
 const UpdateProfile = async (req, res) => {
 	try {
 			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
-			const profile = req.file.path
+			const profile = (process.env.URL_PERFIL+req.file.path)
 				const user = await usuario.findOne({id});
 		if (user) {
 			await usuario.updateOne({id},{ profile });
