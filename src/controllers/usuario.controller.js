@@ -1,6 +1,6 @@
 require('dotenv').config();
 const usuario = require('../models/usuario.model');
-const multer = require('multer')
+const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
 const {checkList} = require('../fake-data/fakelist')
 
@@ -214,6 +214,7 @@ const UpdateProfile = async (req, res) => {
 	try {
 			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
 			const profile = req.file.path
+			console.log("---->",profile)
 				const user = await usuario.findOne({id});
 		if (user) {
 			await usuario.updateOne({id},{ profile });
@@ -364,36 +365,9 @@ const FollowMe = async (req, res, next) => {
 };
 
 
-const storageProfile = multer.diskStorage({
-    destination: function(req, file, cb){cb(null, 'uploads/Profile')},
-    filename: function(req, file, cb){
-        const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
-        cb(null, `${id}_profile.jpg`)
-    }
-})
-const storagebackground_picture = multer.diskStorage({
-    destination: function(req, file, cb){cb(null, 'uploads/background_picture')},
-    filename: function(req, file, cb){
-        const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
-        cb(null, `${id}_background_picture.jpg`)
-    }
-})
-const storagePost = multer.diskStorage({
-    destination: function(req, file, cb){cb(null, 'uploads/Profile')},
-    filename: function(req, file, cb){
-        const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
-        cb(null, `${id}_post.jpg`)
-    }
-})
-const uploadProfile = multer({storage:storageProfile})
-const uploadbackground_picture = multer({storage:storagebackground_picture})
-const uploadpost = multer({storage:storagePost})
 
-const uploadP = uploadProfile.single('profile')
-const uploadb = uploadbackground_picture.single('background_picture')
-const uploadpo = uploadpost.array('profile')
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe , notification, 
-	UpdateProfile, UpdateBackgroundPicture, uploadP, uploadb, uploadpo};
+	UpdateProfile, UpdateBackgroundPicture};
