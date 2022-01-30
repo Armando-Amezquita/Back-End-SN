@@ -312,6 +312,26 @@ const notification = async (idSeguido, idPropio, type) => {
 	}
 }
 
+const getNotification = async(req, res) => {
+	const {token} = req.headers;
+	const { id } = jwt.verify(token,process.env.SECRET_KEY)
+	const myself = await usuario.findOne({ id });
+	if(myself){
+		res.json({notifications: myself.notifications});
+	}else{
+		res.json({message: 'No hay notificaciones para mostrar'});
+	}
+}
+const deleteNotification = async(req,res) => {
+	const { token } = req.headers;
+	const { nameNotification } = req.body
+	const { id } = jwt.verify(token, process.env.SECRET_KEY);
+	const myself = await usuario.findOne({ id });
+	if(myself.notifications){
+		myself.notifications = myself.notifications.filter(notification => notification.name !== nameNotification);
+		res.json({message: `Se elimino la notificacion ${nameNotification}`})
+	}
+}
 // const notificationDelete = async (req,res) => {
 // 	const { id } = req.body;
 // 	const {token} = req.headers;
@@ -370,4 +390,6 @@ module.exports = {
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe , notification, 
-	UpdateProfile, UpdateBackgroundPicture};
+	UpdateProfile, UpdateBackgroundPicture,
+	getNotification, deleteNotification	
+};

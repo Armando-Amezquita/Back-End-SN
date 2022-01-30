@@ -3,7 +3,7 @@ const router = Router();
 
 //controller
 const {isAuth} = require('../controllers/usuario.middlewares')
-const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, notification, UpdateProfile, UpdateBackgroundPicture } =require('../controllers/usuario.controller')
+const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, notification, UpdateProfile, UpdateBackgroundPicture, getNotification, deleteNotification } =require('../controllers/usuario.controller')
     const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller')
 
 
@@ -20,6 +20,8 @@ router.put('/updateBackPicture', isAuth,uploadb, UpdateBackgroundPicture);
 router.put('/updatePostPicture', isAuth,uploadpo, UpdateProfile);
 router.put('/follow', isAuth, FollowMe);
 router.get('/notification', isAuth, notification);
+router.get('/notifications', isAuth, getNotification);
+router.delete('/notifications', isAuth, deleteNotification);
 
 // router.post('/notification', isAuth, notificationDelete);
 
