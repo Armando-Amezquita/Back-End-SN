@@ -11,6 +11,10 @@ const usersAll = async (req, res, next) => {
 		let users = await usuario.find();
 
 		if(req.query.myId==='true'){
+			if(req.query.fastProfile==='true'){
+				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1})
+				return res.json({message:"fastProfile", data:fastData})
+			}
 			return res.json({message:"Solo tu id", id})
 		}
 
