@@ -142,7 +142,7 @@ const postPublicaciones = async (req, res, next) => {
   const likePost = async(req, res) => {
     try {
       const { idpost } = req.body; // Butoon dispara la accion 
-      const publicacion = await post.findOne({_id: idpost}); 
+      const publicacion = await post.findById(idpost); 
       const {token} = req.headers;
       const { id } =  jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
         if (publicacion){
