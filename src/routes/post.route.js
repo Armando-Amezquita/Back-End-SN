@@ -14,7 +14,7 @@ router.post('/', isAuth, postPublicaciones)
 // router.delete('/delete/:id', isAuth, deleteUser)
 router.put('/update', isAuth, UpdatePost)
 router.get('/varios', isAuth, publicacionesXusuario)
-router.get('/likes', isAuth, getPutLike);
+router.put('/likes', isAuth, getPutLike);
 
 
 router.post('/like', async(req,res) => {
