@@ -3,7 +3,6 @@ const post =require('../models/post.model');
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
-const { post } = require('../routes/usuario.route');
 
 const   getPosts = async(req, res, next)=>{
   try {
