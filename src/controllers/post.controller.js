@@ -145,13 +145,14 @@ const postPublicaciones = async (req, res, next) => {
       const publicacion = await post.findById(idpost); 
       const {token} = req.headers;
       const { id } =  jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
-        if (publicacion){
-          if(publicacion.likes.includes(id)){
-            publicacion.likes = publicacion.likes.filter(l => l !== id)
-            await publicacion.save()
-            res.json({message: 'Se quito el like'})
-          }else{
-            publicacion.likes.unshift(id);
+      if (publicacion){
+        if(publicacion.likes.some(like => like.id===id)){
+          publicacion.likes = publicacion.likes.filter(l => l.id !== id)
+          await publicacion.save()
+          res.json({message: 'Se quito el like'})
+        }else{
+          const user = await usuarioModel.findOne({id}, {fullname:1, id:1, profile:1})
+          publicacion.likes.unshift({id, fullname, profile});
             await publicacion.save()
             res.json({message: 'Se agrego un like'})
           }

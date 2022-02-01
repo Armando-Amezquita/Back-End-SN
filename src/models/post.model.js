@@ -8,7 +8,11 @@ const Post = new Schema(
     comentarios: {type:String},
     description: {type: String},
     options: {type:String},
-    likes: [String],
+    likes: [{
+        id:String,
+        fullname:String,
+        profile:String
+    }],
     tags: { type: Array,
             default: [] 
         },
