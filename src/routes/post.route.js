@@ -2,7 +2,7 @@ const { Router } =require('express');
 const router = Router();
 
 //controller
-const { postPublicaciones, UpdatePost, publicacionesXusuario } =require('../controllers/post.controller');
+const { postPublicaciones, UpdatePost, publicacionesXusuario, getPutLike } =require('../controllers/post.controller');
 const { isAuth } = require('../controllers/usuario.middlewares');
 const { getPosts } = require('../controllers/post.controller');
 
@@ -14,6 +14,8 @@ router.post('/', isAuth, postPublicaciones)
 // router.delete('/delete/:id', isAuth, deleteUser)
 router.put('/update', isAuth, UpdatePost)
 router.get('/varios', isAuth, publicacionesXusuario)
+router.get('/likes', isAuth, getPutLike);
+
 
 router.post('/like', async(req,res) => {
     const {id} = req.params
