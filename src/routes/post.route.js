@@ -15,7 +15,7 @@ router.post('/', isAuth, postPublicaciones)
 router.put('/update', isAuth, UpdatePost)
 router.get('/varios', isAuth, publicacionesXusuario)
 router.put('/likes', isAuth, likePost);
-router.put('/comments', isAuth, getPutLike);
+// router.put('/comments', isAuth, getPutLike);
 
 
 
