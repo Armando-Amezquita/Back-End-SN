@@ -139,4 +139,9 @@ const postPublicaciones = async (req, res, next) => {
     res.json(resultado)
   }
 
+  const getPostLike = async(req, res) => {
+    //id de persona que da like y el id del post. traer el token de la persona.
+    
+  }
+
   module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts };

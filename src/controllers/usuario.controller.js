@@ -344,7 +344,6 @@ const deleteNotification = async(req,res) => {
 // 	else{
 // 		res.json({message: 'El usuario no tiene notificaciones'});
 // 	}
-
 // }
 
 const FollowMe = async (req, res, next) => {
@@ -383,6 +382,8 @@ const FollowMe = async (req, res, next) => {
 		console.log(error);
 	}
 };
+
+
 
 
 
