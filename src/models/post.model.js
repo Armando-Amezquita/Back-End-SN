@@ -5,7 +5,12 @@ const Post = new Schema(
     image:{ type:String},
     title: {type:String},
     category: {type:String},
-    comentarios: {type:String},
+    comentarios: [{
+        id: String,
+        fullname: String,
+        profile: String,
+        comentario: String
+    }],
     description: {type: String},
     options: {type:String},
     likes: [{

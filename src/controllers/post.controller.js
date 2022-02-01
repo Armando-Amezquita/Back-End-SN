@@ -154,12 +154,66 @@ const postPublicaciones = async (req, res, next) => {
           const {fullname, profile} = await usuarioModel.findOne({id}, {fullname:1, profile:1})
           publicacion.likes.unshift({id, fullname, profile});
             await publicacion.save()
+            notification(id, null, 'like' )
             res.json({message: 'Se agrego un like'})
           }
         }
     } catch (error) {
       console.log(error);
-      res.send(error)
+      res.send(error);
+    }
+  }
+
+  // const commentPost = (req,res) => {
+  //   try {
+  //     const {idComment} = req.body;
+  //     const publicacion = await await post.findById(idComment);
+  //     const { token } = req.headers;
+  //     const { id } = jwt.verify(token, process.env.SECRET_KEY);
+  //     if(publicacion){
+
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //     res.json(error)
+  //   }
+  // }
+
+  const notification = async (idSeguido, idPropio, type) => {
+    try {
+      const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
+      const userFollow = await usuario.findOne({ id: idSeguido });
+      switch (type) {
+        case 'comment':
+          const messageCommentData = {
+            content: `te hizo un comentario`,
+            icon: 'uploads/Icons/like.svg',
+            name: fullname.split(' ')[0],
+          }
+          userFollow.notifications.push(messageCommentData);
+        break;
+        case 'like':
+          const messageLikeData = {
+            content: `Le gusto un comentario tuyo`,
+            icon: 'uploads/Icons/like.svg',
+            name: fullname.split(' ')[0],
+          }
+          userFollow.notifications.push(messageLikeData);
+        break;
+        case 'follow':
+          const messageFollowData = {
+            content: `te empezo a seguir`,
+            icon: 'uploads/Icons/like.svg',
+            name: fullname.split(' ')[0],
+          }
+          userFollow.notifications.push(messageFollowData);
+          break;
+        default:
+          break;
+      }
+      await userFollow.save();
+    } catch (error) {
+      console.log(error)	
     }
   }
 
