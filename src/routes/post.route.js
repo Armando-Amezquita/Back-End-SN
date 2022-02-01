@@ -2,7 +2,7 @@ const { Router } =require('express');
 const router = Router();
 
 //controller
-const { postPublicaciones, UpdatePost, publicacionesXusuario, getPutLike } =require('../controllers/post.controller');
+const { postPublicaciones, UpdatePost, publicacionesXusuario, likePost } =require('../controllers/post.controller');
 const { isAuth } = require('../controllers/usuario.middlewares');
 const { getPosts } = require('../controllers/post.controller');
 
@@ -14,23 +14,9 @@ router.post('/', isAuth, postPublicaciones)
 // router.delete('/delete/:id', isAuth, deleteUser)
 router.put('/update', isAuth, UpdatePost)
 router.get('/varios', isAuth, publicacionesXusuario)
-router.put('/likes', isAuth, getPutLike);
+router.put('/likes', isAuth, likePost);
+router.put('/comments', isAuth, getPutLike);
 
-
-router.post('/like', async(req,res) => {
-    const {id} = req.params
-    const likes = like(id); 
-
-}) 
-
-const like = async(id) => {
-    const post = await Post.find({_id: ObjectId(id)});
-    if(post){
-        post.like = post.like + 1;
-        await post.save();
-    }
-    return {like: post.like}
-}
 
 
 module.exports = router

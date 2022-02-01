@@ -139,20 +139,20 @@ const postPublicaciones = async (req, res, next) => {
     res.json(resultado)
   }
 
-  const getPutLike = async(req, res) => {
+  const likePost = async(req, res) => {
     try {
       const { idpost } = req.body; // Butoon dispara la accion 
-      const post = await post.findOne({_id: idpost}); 
+      const publicacion = await post.findOne({_id: idpost}); 
       const {token} = req.headers;
       const { id } = await jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
-        const include = post.like.includes(id); // ya esta el id de usuario 
+        const include = publicacion.like.includes(id); // ya esta el id de usuario 
         if(include){
-          post.like = post.like.filter(l => l !== include)
-          await post.save()
+          publicacion.like = publicacion.like.filter(l => l !== include)
+          await publicacion.save()
           res.json({message: 'Se quito el like'})
         }else{
-          post.like = post.like.shift(id);
-          await post.save()
+          publicacion.like = publicacion.like.shift(id);
+          await publicacion.save()
           res.json({message: 'Se agrego un like'})
         }
     } catch (error) {
@@ -161,40 +161,4 @@ const postPublicaciones = async (req, res, next) => {
     }
   }
 
-  /* const FollowMe = async (req, res, next) => {
-	const { followMe } = req.body;
-	const {token} = req.headers;
-	try {
-		let message = '';
-		const { id } = jwt.verify(token,process.env.SECRET_KEY)
-		const myself = await usuario.findOne({ id });
-		if (user) {
-			if (user.follow.followers.includes(id)) {
-				message = `dejaste de seguir a ${user.fullname}`;
-				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
-			} else {
-				message = `seguiste a ${user.fullname}`;
-				user.follow.followers.push(id);
-				myself.follow.follows.push(followMe);
-				await notification(followMe, id, 'follow');
-			}
-			await user.save();
-			await myself.save();
-			res.json({ message });
-		} else {
-			res.json({ message: 'No existe el usuario' });
-		}
-
-		// await usuario.updateOne({_id:id},
-		// 	{
-		// 		$push:{
-		// 			"follow.followers":  flows
-		// 		}
-		// 	})
-	} catch (error) {
-		console.log(error);
-	}
-}; */
-
-  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts, getPutLike };
+  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts, likePost };
