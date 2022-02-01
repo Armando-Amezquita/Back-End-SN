@@ -151,7 +151,7 @@ const postPublicaciones = async (req, res, next) => {
             await publicacion.save()
             res.json({message: 'Se quito el like'})
           }else{
-            publicacion.likes = publicacion.likes.unshift(id);
+            publicacion.likes.unshift(id);
             await publicacion.save()
             res.json({message: 'Se agrego un like'})
           }
