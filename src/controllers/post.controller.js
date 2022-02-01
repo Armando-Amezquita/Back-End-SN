@@ -144,16 +144,17 @@ const postPublicaciones = async (req, res, next) => {
       const { idpost } = req.body; // Butoon dispara la accion 
       const publicacion = await post.findOne({_id: idpost}); 
       const {token} = req.headers;
-      const { id } = await jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
-        const include = publicacion.like.includes(id); // ya esta el id de usuario 
-        if(include){
-          publicacion.like = publicacion.like.filter(l => l !== include)
-          await publicacion.save()
-          res.json({message: 'Se quito el like'})
-        }else{
-          publicacion.like = publicacion.like.shift(id);
-          await publicacion.save()
-          res.json({message: 'Se agrego un like'})
+      const { id } =  jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
+        if (publicacion){
+          if(publicacion.likes.includes(id)){
+            publicacion.likes = publicacion.likes.filter(l => l !== id)
+            await publicacion.save()
+            res.json({message: 'Se quito el like'})
+          }else{
+            publicacion.likes = publicacion.likes.unshift(id);
+            await publicacion.save()
+            res.json({message: 'Se agrego un like'})
+          }
         }
     } catch (error) {
       console.log(error);
