@@ -152,7 +152,6 @@ const postPublicaciones = async (req, res, next) => {
           res.json({message: 'Se quito el like'})
         }else{
           const {fullname, id, profile} = await usuarioModel.findOne({id}, {fullname:1, id:1, profile:1})
-          console.log(user)
           publicacion.likes.unshift({id, fullname, profile});
             await publicacion.save()
             res.json({message: 'Se agrego un like'})
