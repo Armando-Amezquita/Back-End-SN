@@ -155,6 +155,7 @@ const postPublicaciones = async (req, res, next) => {
           publicacion.likes.unshift({id, fullname, profile});
             await publicacion.save()
             notification(id, null, 'like' )
+            console.log(notification)
             res.json({message: 'Se agrego un like'})
           }
         }
