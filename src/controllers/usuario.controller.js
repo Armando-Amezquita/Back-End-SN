@@ -293,15 +293,20 @@ const notification = async (idSeguido, idPropio, type) => {
 				}else{
 					console.log('No te puedes gustar ajajaj');
 				}
-			break;
-			case 'like':
-				const messageLikeData = {
-					id: idPropio,
+				break;
+				case 'like':
+					const messageLikeData = {
+						id: idPropio,
 					content: `le gusto tu post`,
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notifications.push(messageLikeData);
+				if(!messageLikeData.idPropio === idPropio){
+					userFollow.notifications.push(messageLikeData);
+				}else{
+					console.log('No te puedes gustar ajajaj');
+				}
+				// userFollow.notifications.push(messageLikeData);
 			break;
 			case 'follow':
 				const messageFollowData = {
@@ -310,7 +315,12 @@ const notification = async (idSeguido, idPropio, type) => {
 					icon: 'uploads/Icons/follow.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notifications.push(messageFollowData);
+				if(!messageFollowData.idPropio === idPropio){
+					userFollow.notifications.push(messageFollowData);
+				}else{
+					console.log('No te puedes gustar ajajaj');
+				}
+				// userFollow.notifications.push(messageFollowData);
 				break;
 			default:
 				break;
