@@ -1,5 +1,6 @@
 require('dotenv').config()
 const post =require('../models/post.model');
+const {notification} = require('./usuario.controller');
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
@@ -141,7 +142,7 @@ const postPublicaciones = async (req, res, next) => {
 
   const likePost = async(req, res) => {
     try {
-      const { idpost } = req.body; // Butoon dispara la accion 
+      const { idpost } = req.body; // Butoon dispara la accion
       const publicacion = await post.findById(idpost); 
       const {token} = req.headers;
       const { id } =  jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
@@ -153,10 +154,9 @@ const postPublicaciones = async (req, res, next) => {
         }else{
           const {fullname, profile} = await usuarioModel.findOne({id}, {fullname:1, profile:1})
           publicacion.likes.unshift({id, fullname, profile});
-            await publicacion.save()
-            notification(id, null, 'like' )
-            console.log(notification)
-            res.json({message: 'Se agrego un like'})
+          await publicacion.save()
+          notification(publicacion.autor, id, 'like');
+          res.json({message: 'Se agrego un like'});
           }
         }
     } catch (error) {
@@ -165,57 +165,67 @@ const postPublicaciones = async (req, res, next) => {
     }
   }
 
-  // const commentPost = (req,res) => {
-  //   try {
-  //     const {idComment} = req.body;
-  //     const publicacion = await await post.findById(idComment);
-  //     const { token } = req.headers;
-  //     const { id } = jwt.verify(token, process.env.SECRET_KEY);
-  //     if(publicacion){
+  //Ruta para tener todqas notificaciones y una para eliminarlas y incrementar el like mismo. 
 
-  //     }
+  // const likePost = async(req, res) => {
+  //   try {
+  //     const { idpost } = req.body; // Butoon dispara la accion
+  //     const publicacion = await post.findById(idpost); 
+  //     const {token} = req.headers;
+  //     const { id } =  jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
+  //     if (publicacion){
+  //       if(publicacion.likes.some(like => like.id===id)){
+  //         publicacion.likes = publicacion.likes.filter(l => l.id !== id)
+  //         await publicacion.save()
+  //         res.json({message: 'Se quito el like'})
+  //       }else{
+  //         const {fullname, profile} = await usuarioModel.findOne({id}, {fullname:1, profile:1})
+  //         publicacion.likes.unshift({id, fullname, profile});
+  //         await publicacion.save()
+  //         notification(publicacion.autor, id, 'like');
+  //         res.json({message: 'Se agrego un like'});
+  //         }
+  //       }
   //   } catch (error) {
-  //     console.log(error)
-  //     res.json(error)
+  //     console.log(error);
+  //     res.send(error);
   //   }
   // }
-
-  const notification = async (idSeguido, idPropio, type) => {
-    try {
-      const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
-      const userFollow = await usuario.findOne({ id: idSeguido });
-      switch (type) {
-        case 'comment':
-          const messageCommentData = {
-            content: `te hizo un comentario`,
-            icon: 'uploads/Icons/like.svg',
-            name: fullname.split(' ')[0],
-          }
-          userFollow.notifications.push(messageCommentData);
-        break;
-        case 'like':
-          const messageLikeData = {
-            content: `Le gusto un comentario tuyo`,
-            icon: 'uploads/Icons/like.svg',
-            name: fullname.split(' ')[0],
-          }
-          userFollow.notifications.push(messageLikeData);
-        break;
-        case 'follow':
-          const messageFollowData = {
-            content: `te empezo a seguir`,
-            icon: 'uploads/Icons/like.svg',
-            name: fullname.split(' ')[0],
-          }
-          userFollow.notifications.push(messageFollowData);
-          break;
-        default:
-          break;
-      }
-      await userFollow.save();
-    } catch (error) {
-      console.log(error)	
-    }
-  }
+  // const notification = async (idPropio, type) => {
+  //   try {
+  //     const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
+  //     switch (type) {
+  //       case 'comment':
+  //         const messageCommentData = {
+  //           content: `te hizo un comentario`,
+  //           icon: 'uploads/Icons/like.svg',
+  //           name: fullname.split(' ')[0],
+  //         }
+  //         userFollow.notifications.push(messageCommentData);
+  //       break;
+  //       case 'like':
+  //         const messageLikeData = {
+  //           content: `Le gusto un comentario tuyo`,
+  //           icon: 'uploads/Icons/like.svg',
+  //           name: fullname.split(' ')[0],
+  //         }
+  //         userFollow.notifications.push(messageLikeData);
+  //       break;
+  //       case 'follow':
+  //         const messageFollowData = {
+  //           content: `te empezo a seguir`,
+  //           icon: 'uploads/Icons/like.svg',
+  //           name: fullname.split(' ')[0],
+  //         }
+  //         userFollow.notifications.push(messageFollowData);
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //     await userFollow.save();
+  //   } catch (error) {
+  //     console.log(error)	
+  //   }
+  // }
 
   module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts, likePost };

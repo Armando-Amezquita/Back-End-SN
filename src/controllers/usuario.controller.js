@@ -276,8 +276,6 @@ const authorization = async (req, res, next) => {
 };
 
 const notification = async (idSeguido, idPropio, type) => {
-	// const { idSeguido } = req.body;
-	// const { idPropio } = jwt.verify(token, process.env.SECRET_KEY);
 	try {
 		const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
 		const userFollow = await usuario.findOne({ id: idSeguido });
@@ -286,14 +284,14 @@ const notification = async (idSeguido, idPropio, type) => {
 			case 'comment':
 				const messageCommentData = {
 					content: `te hizo un comentario`,
-					icon: 'uploads/Icons/like.svg',
+					icon: 'uploads/Icons/comment.svg',
 					name: fullname.split(' ')[0],
 				}
 				userFollow.notifications.push(messageCommentData);
 			break;
 			case 'like':
 				const messageLikeData = {
-					content: `Le gusto un comentario tuyo`,
+					content: `Le gusto tu post tuyo`,
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 				}
@@ -302,7 +300,7 @@ const notification = async (idSeguido, idPropio, type) => {
 			case 'follow':
 				const messageFollowData = {
 					content: `te empezo a seguir`,
-					icon: 'uploads/Icons/like.svg',
+					icon: 'uploads/Icons/follow.svg',
 					name: fullname.split(' ')[0],
 				}
 				userFollow.notifications.push(messageFollowData);
@@ -319,23 +317,27 @@ const notification = async (idSeguido, idPropio, type) => {
 const getNotification = async(req, res) => {
 	const {token} = req.headers;
 	const { id } = jwt.verify(token,process.env.SECRET_KEY)
-	const myself = await usuario.findOne({ id });
-	if(myself){
-		res.json({notifications: myself.notifications});
+	console.log(id);
+	const {notifications} = await usuario.findOne({ id }, {notifications: 1});
+	if(notifications){
+		res.json({notifications});
 	}else{
 		res.json({message: 'No hay notificaciones para mostrar'});
 	}
 }
 const deleteNotification = async(req,res) => {
 	const { token } = req.headers;
-	const { nameNotification } = req.body
 	const { id } = jwt.verify(token, process.env.SECRET_KEY);
-	const myself = await usuario.findOne({ id });
-	if(myself.notifications){
-		myself.notifications = myself.notifications.filter(notification => notification.name !== nameNotification);
-		res.json({message: `Se elimino la notificacion ${nameNotification}`})
+	const {notifications} = await usuario.findOne({ id }, {notification: 1});
+	if(notifications){
+		notifications = '';
+		await notifications.save();
+		res.json({message: `Se eliminaron las notificaciones `});
+	}else{
+		res.json({message: 'No hay notificaciones'});
 	}
 }
+
 // const notificationDelete = async (req,res) => {
 // 	const { id } = req.body;
 // 	const {token} = req.headers;
