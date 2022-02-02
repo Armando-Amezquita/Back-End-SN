@@ -52,13 +52,14 @@ const usersAll = async (req, res, next) => {
 };
 
 const userByName = async (req, res) => {
+	console.log('-------------------------------------------------------------------->')
 	let { name } = req.params;
 	let expresion = null;
 	if (name.includes(' ')) {
 		const result = name.split(' ');
 		expresion = new RegExp();
 	} else {
-		expresion = new RegExp('^[' + name + '+]', 'i');
+		expresion = new RegExp('(' + name + '+)', 'i');
 		// expresion = new RegExp("^["+ name.charAt(0).toUpperCase()+name.slice(1).toLowerCase()+"|"+name+"+]")
 	}
 	try {
@@ -289,7 +290,6 @@ const getNotification = async(req, res) => {
 		const {token} = req.headers;
 		const { id } = jwt.verify(token,process.env.SECRET_KEY);
 		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
-		console.log(notifications)
 		if(notifications){
 			res.json({notifications});
 		}else{
@@ -306,10 +306,10 @@ const deleteNotificationById = async(req,res) => {
 		const { idnotification } = req.params; 
 		const { token } = req.headers;
 		const { id } = jwt.verify(token, process.env.SECRET_KEY);
-		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
-		if(notifications && idnotification){
-			notifications = await notifications.id.filter(ele => ele.id !== idnotification)
-			await notifications.save();
+		const notify = await usuario.findOne({ id }, {notifications:1});
+		if(notify){
+			notify.notifications = notify.notifications.filter(ele => ele._id.toString() !== idnotification)
+			await notify.save();
 			res.json({message: 'Se eliminó la notificación.'})
 		}
 		else{
@@ -317,7 +317,8 @@ const deleteNotificationById = async(req,res) => {
 		}
 
 	} catch (error) {
-		
+		console.log(error)
+		res.send(error)
 	}
 }
 const deleteNotification = async(req,res) => {
