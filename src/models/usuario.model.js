@@ -18,12 +18,14 @@ const usuarios= new Schema({
     { name: String, 
       link: String 
     }],
-    post: 
-      { type: Array,
-        default: [] 
+  activity: 
+      { 
+        likes:[{idpost:String, title: String}],
+        post:[{idpost:String, title: String}],
+        comments:[{idPost:String, idcomment:String, content:String}]
       },
-    follow: 
-      { followers:
+  follow: 
+    { followers:
         {
           type: Array,
           default: []
