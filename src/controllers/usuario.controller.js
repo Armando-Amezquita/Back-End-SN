@@ -254,7 +254,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 					name: fullname.split(' ')[0],
 					idpost: idpost
 				}
-				userFollow.notifications.push(messageCommentData);
+				userFollow.notifications.unshift(messageCommentData);
 				break;
 				case 'like':
 					const messageLikeData = {
@@ -264,7 +264,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 					name: fullname.split(' ')[0],
 					idpost: idpost
 				}
-				userFollow.notifications.push(messageLikeData);
+				userFollow.notifications.unshift(messageLikeData);
 			break;
 			case 'follow':
 				const messageFollowData = {
@@ -273,7 +273,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 					icon: 'uploads/Icons/follow.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notifications.push(messageFollowData);
+				userFollow.notifications.unshift(messageFollowData);
 				break;
 			default:
 				break;
