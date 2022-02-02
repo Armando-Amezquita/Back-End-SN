@@ -5,7 +5,7 @@ require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
 
-const   getPosts = async(req, res, next)=>{
+const getPosts = async(req, res, next)=>{
   try {
     const {id} = jwt.verify(req.headers.token, process.env.SECRET_KEY)
     let allPost = await post.aggregate([
@@ -155,7 +155,7 @@ const postPublicaciones = async (req, res, next) => {
           const {fullname, profile} = await usuarioModel.findOne({id}, {fullname:1, profile:1})
           publicacion.likes.unshift({id, fullname, profile});
           await publicacion.save()
-          notification(publicacion.autor, id, 'like');
+          notification(publicacion.autor, id, 'like', idpost);
           res.json({message: 'Se agrego un like'});
           }
         }

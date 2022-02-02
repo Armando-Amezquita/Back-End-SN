@@ -275,7 +275,7 @@ const authorization = async (req, res, next) => {
 	}
 };
 
-const notification = async (idSeguido, idPropio, type) => {
+const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 	try {
 		if(idSeguido === idPropio){
 			return null
@@ -290,6 +290,7 @@ const notification = async (idSeguido, idPropio, type) => {
 					content: `te hizo un comentario`,
 					icon: 'uploads/Icons/comment.svg',
 					name: fullname.split(' ')[0],
+					idpost: idpost
 				}
 				userFollow.notifications.push(messageCommentData);
 				break;
@@ -299,6 +300,7 @@ const notification = async (idSeguido, idPropio, type) => {
 					content: `le gusto tu post`,
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
+					idpost: idpost
 				}
 				userFollow.notifications.push(messageLikeData);
 			break;
