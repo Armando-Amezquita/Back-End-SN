@@ -277,9 +277,12 @@ const authorization = async (req, res, next) => {
 
 const notification = async (idSeguido, idPropio, type) => {
 	try {
+		if(idSeguido === idPropio){
+			return null
+		}
 		const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
 		const userFollow = await usuario.findOne({ id: idSeguido });
-		console.log(fullname, userFollow) // Trae solo el nombre
+		console.log(fullname, userFollow) 
 		switch (type) {
 			case 'comment':
 				const messageCommentData = {
