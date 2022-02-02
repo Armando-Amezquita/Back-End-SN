@@ -3,12 +3,13 @@ const router = Router();
 
 //controller
 const {isAuth} = require('../controllers/usuario.middlewares')
-const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, notification, UpdateProfile, UpdateBackgroundPicture, getNotification, deleteNotification } =require('../controllers/usuario.controller')
+const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, notification, UpdateProfile, UpdateBackgroundPicture, getNotification, deleteNotification, deleteNotificationById } =require('../controllers/usuario.controller')
 const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller')
 
 
 //routes
 // router.get('/login', login);
+router.delete('/notificationsbyID/:id', isAuth, deleteNotificationById);
 router.delete('/notifications', isAuth, deleteNotification);
 router.get('/notifications', isAuth, getNotification);
 router.get('/:name', isAuth, userByName);

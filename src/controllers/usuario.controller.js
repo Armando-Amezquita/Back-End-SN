@@ -289,6 +289,7 @@ const getNotification = async(req, res) => {
 		const {token} = req.headers;
 		const { id } = jwt.verify(token,process.env.SECRET_KEY);
 		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
+		console.log(notifications)
 		if(notifications){
 			res.json({notifications});
 		}else{
@@ -297,14 +298,32 @@ const getNotification = async(req, res) => {
 	} catch (error) {
 		console.log(error)
 		res.json(error)
+	}
+}
 
+const deleteNotificationById = async(req,res) => {
+	try {
+		const { idnotification } = req.params; 
+		const { token } = req.headers;
+		const { id } = jwt.verify(token, process.env.SECRET_KEY);
+		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
+		if(notifications && idnotification){
+			notifications = await notifications.id.filter(ele => ele.id !== idnotification)
+			await notifications.save();
+			res.json({message: 'Se eliminó la notificación.'})
+		}
+		else{
+			res.json({message: `No hay una notificación con dicho ID`});
+		}
+
+	} catch (error) {
+		
 	}
 }
 const deleteNotification = async(req,res) => {
 	try {
 		const { token } = req.headers;
 		const { id } = jwt.verify(token, process.env.SECRET_KEY);
-		console.log(id)
 		const notifications = await usuario.findOne({ id }, {notifications: 1});
 		if(notifications){
 			notifications.notifications = [];
@@ -362,5 +381,5 @@ module.exports = {
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe , notification, 
 	UpdateProfile, UpdateBackgroundPicture,
-	getNotification, deleteNotification	
+	getNotification, deleteNotification, deleteNotificationById
 };
