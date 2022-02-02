@@ -10,6 +10,7 @@ const usuarios= new Schema({
   description: {type:String, default: ""},
   background_picture: {type:String, default: ""},
   notifications:[{
+    id: String,
     content: String,
     icon: String,
     name: String
