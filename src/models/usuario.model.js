@@ -8,7 +8,7 @@ const usuarios= new Schema({
   cohorte: [{type:String, default: ""}],
   rol: {type:String, default: ""},
   description: {type:String, default: ""},
-  background_picture: {type:String, default: ""},
+  background_picture: {type:String, default: "uploads/background_picture/default.jpeg"},
   notifications:[{
     id: String,
     content: String,
