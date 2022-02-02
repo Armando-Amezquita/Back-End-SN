@@ -2,7 +2,7 @@ const { Router } =require('express');
 const router = Router();
 
 //controller
-const { postPublicaciones, UpdatePost, publicacionesXusuario, likePost } =require('../controllers/post.controller');
+const { postPublicaciones, UpdatePost, publicacionesXusuario, likePost, commentPost } =require('../controllers/post.controller');
 const { isAuth } = require('../controllers/usuario.middlewares');
 const { getPosts } = require('../controllers/post.controller');
 
@@ -15,6 +15,7 @@ router.post('/', isAuth, postPublicaciones)
 router.put('/update', isAuth, UpdatePost)
 router.get('/varios', isAuth, publicacionesXusuario)
 router.put('/likes', isAuth, likePost);
+router.post('/comentarios', isAuth, commentPost)
 // router.put('/comments', isAuth, getPutLike);
 
 

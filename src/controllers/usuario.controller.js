@@ -63,24 +63,11 @@ const userByName = async (req, res) => {
 	}
 	try {
 		const toto = await usuario.find({ fullname: { $regex: expresion } });
-		// const toto = await usuario.aggregate([{$match:{fullname : name}}])
-		// const result =  infoTotal.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
 		toto ? res.json(toto) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
 	} catch (error) {
 		console.error(error);
 	}
 };
-
-// const userByName = async (req, res) => {
-// 	let { name } = req.params;
-// 	try {
-// 		const infoTotal = await usuario.find();
-//     const result =  infoTotal.filter(e => e.fullname.toLowerCase().includes(name.toLowerCase()))
-//     result ? res.json(result) : res.json({ message: 'No se encontro un usuario con ese nombre', status: 500 });
-// 	} catch (error) {
-// 		console.error(error);
-// 	}
-// };
 
 const userById = async (req, res) => {
 	const { id } = req.params;
@@ -119,17 +106,7 @@ const userById = async (req, res) => {
 
 const postUser = async (req, res, next) => {
 	try {
-		const {
-			id,
-			fullname,
-			birthday,
-			email,
-			profile,
-			nacionalidad,
-			rol,
-			description,
-			background_picture
-		} = req.body;
+		const { id, fullname, birthday,	email, profile,	nacionalidad, rol, description,	background_picture } = req.body;
 		const isCreated = await usuario.findOne({ id: id });
 		if (!isCreated) {
 			if (!id || !fullname || !email) {
@@ -166,21 +143,6 @@ const postUser = async (req, res, next) => {
 		res.send(error);
 	}
 };
-
-// const postUser = async (req, res) => {
-//   const { name, lastName, birthday, email, profile,  } = req.body
-//   try {
-//     if(!name || !lastName || !email){
-//       res.json({message: 'Se deben llenar todos los campos requeridos'});
-//     }else {
-//       const newUsuario =  await new usuario({ name, lastName, birthday, email, profile,  });
-//       await newUsuario.save();
-//       res.json({message:"Se ha registrado satisfactoriamente"});
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 
 const deleteUser = async (req, res) => {
 	try {
@@ -357,20 +319,6 @@ const deleteNotification = async(req,res) => {
 	}
 }
 
-// const notificationDelete = async (req,res) => {
-// 	const { id } = req.body;
-// 	const {token} = req.headers;
-// 	const id = jwt.verify(token,process.env.SECRET_KEY)
-// 	const myself = await usuario.findOne({ id });
-// 	if(myself.notification >= 0){
-// 		myself.notification.pop()
-// 		res.json({message: 'Se ha eliminado una notificación'});
-// 	}
-// 	else{
-// 		res.json({message: 'El usuario no tiene notificaciones'});
-// 	}
-// }
-
 const FollowMe = async (req, res, next) => {
 	const { followMe } = req.body;
 	const {token} = req.headers;
@@ -407,9 +355,6 @@ const FollowMe = async (req, res, next) => {
 		console.log(error);
 	}
 };
-
-
-
 
 
 module.exports = { 
