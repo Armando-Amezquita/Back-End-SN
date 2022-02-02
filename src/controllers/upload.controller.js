@@ -2,7 +2,6 @@ const multer = require('multer')
 require('dotenv').config()
 const jwt = require("jsonwebtoken");
 
-// const { token } = require('morgan');
 const storageProfile = multer.diskStorage({
     destination: function(req, file, cb){cb(null, 'uploads/Profile')},
     filename: function(req, file, cb){
