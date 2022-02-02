@@ -43,16 +43,6 @@ const getPosts = async(req, res, next)=>{
       e.autorData[0]={...newAuthor}}
       return e
     })
-    // for(let post of allPost){
-      //   const user = await usuarioModel.findOne({id: post.autor});
-      //   newAuthor = {
-        //     id: user.id,
-        //     profile: user.profile,
-        //     fullname: user.fullname
-        //   }
-      //   post.autor = JSON.stringify(newAuthor)
-      // }
-      // console.log(allPost, 'all')
       if(req.query.myself==='false'){
         allPost = allPost.filter(e=>e.autorData[0].id!==id)
       }
@@ -61,6 +51,13 @@ const getPosts = async(req, res, next)=>{
       }
       if(req.query.userid!==undefined){
         allPost = allPost.filter(e=>e.autorData[0].id===req.query.userid)
+      }
+      if(req.query.idpost!==undefined){
+        allPost = allPost.filter(e=>e._id.toString()===req.query.idpost)
+        if(req.query.comments!==true){
+          allPost = allPost.map(e=>e.comentarios)
+        }
+        return res.json({message="post por id", data:allPost[0]})
       }
       if(req.query.follows==='true'){
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
