@@ -54,7 +54,7 @@ const getPosts = async(req, res, next)=>{
       }
       if(req.query.idpost!==undefined){
         allPost = allPost.filter(e=>e._id.toString()===req.query.idpost)
-        if(req.query.comments!==true){
+        if(req.query.comments==='true'){
           allPost = allPost.map(e=>e.comentarios)
         }
         return res.json({message:"post por id", data:allPost[0]})
