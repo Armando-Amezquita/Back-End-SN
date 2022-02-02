@@ -337,15 +337,21 @@ const getNotification = async(req, res) => {
 	}
 }
 const deleteNotification = async(req,res) => {
-	const { token } = req.headers;
-	const { id } = jwt.verify(token, process.env.SECRET_KEY);
-	const {notifications} = await usuario.findOne({ id }, {notification: 1});
-	if(notifications){
-		notifications = '';
-		await notifications.save();
-		res.json({message: `Se eliminaron las notificaciones `});
-	}else{
-		res.json({message: 'No hay notificaciones'});
+	try {
+		const { token } = req.headers;
+		const { id } = jwt.verify(token, process.env.SECRET_KEY);
+		console.log(id)
+		const notifications = await usuario.findOne({ id }, {notifications: 1});
+		if(notifications){
+			notifications.notifications = [];
+			await notifications.save();
+			res.json({message: `Se eliminaron las notificaciones `});
+		}else{
+			res.json({message: 'No hay notificaciones'});
+		}
+	} catch (error) {
+		console.log(error)
+		res.json(error)
 	}
 }
 

@@ -9,8 +9,8 @@ const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller'
 
 //routes
 // router.get('/login', login);
-router.get('/notifications', isAuth, getNotification);
 router.delete('/notifications', isAuth, deleteNotification);
+router.get('/notifications', isAuth, getNotification);
 router.get('/:name', isAuth, userByName);
 router.get('/', isAuth, usersAll);
 router.get('/Id/:id', isAuth, userById);
