@@ -20,8 +20,8 @@ router.put('/updateProfile', isAuth,uploadP, UpdateProfile);
 router.put('/updateBackPicture', isAuth,uploadb, UpdateBackgroundPicture);
 router.put('/updatePostPicture', isAuth,uploadpo, UpdateProfile);
 router.put('/follow', isAuth, FollowMe);
-router.delete('/notifications', isAuth, deleteNotification);
 router.delete('/notifications/:idnotification', isAuth, deleteNotificationById);
+router.delete('/notifications', isAuth, deleteNotification);
 // router.get('/notification', isAuth, notification);
 
 // router.post('/notification', isAuth, notificationDelete);
