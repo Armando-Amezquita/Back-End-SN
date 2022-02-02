@@ -4,7 +4,7 @@ const router = Router();
 //controller
 const {isAuth} = require('../controllers/usuario.middlewares')
 const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, notification, UpdateProfile, UpdateBackgroundPicture, getNotification, deleteNotification } =require('../controllers/usuario.controller')
-    const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller')
+const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller')
 
 
 //routes

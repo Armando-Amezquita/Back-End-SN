@@ -283,6 +283,7 @@ const notification = async (idSeguido, idPropio, type) => {
 		switch (type) {
 			case 'comment':
 				const messageCommentData = {
+					id: idPropio,
 					content: `te hizo un comentario`,
 					icon: 'uploads/Icons/comment.svg',
 					name: fullname.split(' ')[0],
@@ -291,6 +292,7 @@ const notification = async (idSeguido, idPropio, type) => {
 			break;
 			case 'like':
 				const messageLikeData = {
+					id: idPropio,
 					content: `Le gusto tu post tuyo`,
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
@@ -299,6 +301,7 @@ const notification = async (idSeguido, idPropio, type) => {
 			break;
 			case 'follow':
 				const messageFollowData = {
+					id: idPropio,
 					content: `te empezo a seguir`,
 					icon: 'uploads/Icons/follow.svg',
 					name: fullname.split(' ')[0],
@@ -319,7 +322,9 @@ const getNotification = async(req, res) => {
 	const { id } = jwt.verify(token,process.env.SECRET_KEY)
 	console.log(id);
 	const {notifications} = await usuario.findOne({ id }, {notifications: 1});
+	console.log('notificacion',notification)
 	if(notifications){
+		console.log('notificacion',notification)
 		res.json({notifications});
 	}else{
 		res.json({message: 'No hay notificaciones para mostrar'});
