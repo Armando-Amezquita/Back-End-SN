@@ -52,7 +52,6 @@ const usersAll = async (req, res, next) => {
 };
 
 const userByName = async (req, res) => {
-	console.log('-------------------------------------------------------------------->')
 	let { name } = req.params;
 	let expresion = null;
 	if (name.includes(' ')) {
