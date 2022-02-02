@@ -318,16 +318,19 @@ const notification = async (idSeguido, idPropio, type) => {
 }
 
 const getNotification = async(req, res) => {
-	const {token} = req.headers;
-	const { id } = jwt.verify(token,process.env.SECRET_KEY)
-	console.log(id);
-	const {notifications} = await usuario.findOne({ id }, {notifications: 1});
-	console.log('notificacion',notification)
-	if(notifications){
-		console.log('notificacion',notification)
-		res.json({notifications});
-	}else{
-		res.json({message: 'No hay notificaciones para mostrar'});
+	try {
+		const {token} = req.headers;
+		const { id } = jwt.verify(token,process.env.SECRET_KEY);
+		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
+		if(notifications){
+			res.json({notifications});
+		}else{
+			res.json({message: 'No hay notificaciones para mostrar'});
+		}
+	} catch (error) {
+		console.log(error)
+		res.json(error)
+
 	}
 }
 const deleteNotification = async(req,res) => {
