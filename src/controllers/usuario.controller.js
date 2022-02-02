@@ -288,12 +288,16 @@ const notification = async (idSeguido, idPropio, type) => {
 					icon: 'uploads/Icons/comment.svg',
 					name: fullname.split(' ')[0],
 				}
-				userFollow.notifications.push(messageCommentData);
+				if(!messageCommentData.idPropio === idPropio){
+					userFollow.notifications.push(messageCommentData);
+				}else{
+					console.log('No te puedes gustar ajajaj');
+				}
 			break;
 			case 'like':
 				const messageLikeData = {
 					id: idPropio,
-					content: `Le gusto tu post tuyo`,
+					content: `le gusto tu post`,
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 				}
