@@ -170,17 +170,11 @@ const postPublicaciones = async (req, res, next) => {
       const {token} = req.headers;
       const { id } =  jwt.verify(token,process.env.SECRET_KEY); // Persona que dispara la accion
       if (publicacion){
-        if(publicacion.comentarios.some(comentario => comentario.id===id)){
-          publicacion.comentarios = publicacion.comentarios.filter(c => c.id !== id)
-          await publicacion.save()
-          res.json({message: 'Se borro el comentario'})
-        }else{
-          const {fullname, profile} = await usuarioModel.findOne({id}, {fullname:1, profile:1})
-          publicacion.comentarios.unshift({id, fullname, profile, comentario});
-          await publicacion.save()
-          notification(publicacion.autor, id, 'comment', idpost);
-          res.json({message: 'Se agrego un comentario'});
-          }
+        const {fullname, profile} = await usuarioModel.findOne({id}, {fullname:1, profile:1})
+        publicacion.comentarios.unshift({id, fullname, profile, comentario});
+        await publicacion.save()
+        notification(publicacion.autor, id, 'comment', idpost);
+        res.json({message: 'Se agrego un comentario'});
         }
     } catch (error) {
       console.log(error);
