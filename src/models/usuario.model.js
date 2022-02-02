@@ -13,7 +13,8 @@ const usuarios= new Schema({
     id: String,
     content: String,
     icon: String,
-    name: String
+    name: String,
+    idpost: String
   }],
   social_networks: [
     { name: String, 
