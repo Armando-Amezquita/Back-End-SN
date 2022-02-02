@@ -10,7 +10,7 @@ server.use(express.urlencoded({ extended: false, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
 // server.use(cookieParser());
 
-server.use(morgan('dev'));
+// server.use(morgan('dev'));
 server.use(cors())
 
 //MANEJO DE ERRORES
