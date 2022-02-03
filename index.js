@@ -48,13 +48,20 @@ const getUser = (userId) => {
 	return users.find((user) => user.userId === userId);
 };
 
+const removeUser = (socketId)=>{
+	users = users.filter(user => user.socketId !== socketId)
+}
+
 io.on('connection', (socket) => {
+//CONNECT	
 	console.log(socket.id + ' a user conected');
 	socket.on('addUser', (userId) => {
 		addUser(userId, socket.id);
 	});
 	io.emit('getUsers', users);
 
+
+//CHAT
 	socket.on('sendMessage', ({ senderId, receiverId, text }) => {
 		const receiver = getUser(receiverId);
 		if (receiver) {
@@ -72,8 +79,9 @@ io.on('connection', (socket) => {
 		});
 	});
 
-
+//DISCONNECT
 	socket.on('disconnect', ()=>{
+		removeUser(socket.id)
 		console.log(socket.id, " a user disconnected")
 	})
 });
