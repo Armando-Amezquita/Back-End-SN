@@ -3,20 +3,17 @@ const { Schema, model } = require('mongoose');
 const Post = new Schema(
     {
     image:{ type: Array,
-        default: [{}] 
+        default: [] 
     },
     title: {type:String},
     category: {type:String},
-    comentarios: [({
+    comentarios: [{
         id: String,
         fullname: String,
         profile: String,
-        comentario: String
-    }),
-    {
-        timestamps: true
-    }
-],
+        comentario: String,
+        createdAt: {type:Date, default: Date.now()}
+     }],
     description: {type: String},
     options: {type:String},
     likes: [{
@@ -29,9 +26,7 @@ const Post = new Schema(
         },
     autor:{type: String}
 },
-{
-    timestamps: true
-});
+{ timestamps: true });
 
 module.exports = model('post', Post)
 
