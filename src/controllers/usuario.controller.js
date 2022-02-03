@@ -12,7 +12,7 @@ const usersAll = async (req, res, next) => {
 
 		if(req.query.myId==='true'){
 			if(req.query.fastProfile==='true'){
-				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1, fullname:1})
+				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1, fullname:1, rol:1})
 				return res.json({message:"fastProfile", data:fastData})
 			}
 			return res.json({message:"Solo tu id", id})
@@ -315,7 +315,7 @@ const deleteNotification = async(req,res) => {
 		const { id } = jwt.verify(token, process.env.SECRET_KEY);
 		const notifications = await usuario.findOne({ id }, {notifications: 1});
 		if(notifications){
-			notifications.notifications = []
+			notifications.notifications = [];
 			console.log(notifications)
 			await notifications.save();
 			res.json({message: `Se eliminaron las notificaciones `});
