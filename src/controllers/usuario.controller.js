@@ -324,9 +324,9 @@ const deleteNotification = async(req,res) => {
 	try {
 		const { token } = req.headers;
 		const { id } = jwt.verify(token, process.env.SECRET_KEY);
-		const notifications = await usuario.findOne({ id }, {notifications: 1});
+		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
 		if(notifications){
-			notifications.notifications = [];
+			notifications.push([]);
 			await notifications.save();
 			res.json({message: `Se eliminaron las notificaciones `});
 		}else{
