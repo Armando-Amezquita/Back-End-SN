@@ -14,6 +14,7 @@ const { isAuth } = require('../controllers/usuario.middlewares');
 const { getPosts } = require('../controllers/post.controller');
 const { uploadpo } =require('../controllers/upload.controller')
 
+
 //routes
 router.get('/', getPosts)
 // router.get('/name/:name', userByName)

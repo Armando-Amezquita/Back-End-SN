@@ -12,7 +12,11 @@ const Post = new Schema(
         fullname: String,
         profile: String,
         comentario: String
-    }],
+    },
+    {
+        timestamps: true
+    }
+],
     description: {type: String},
     options: {type:String},
     likes: [{
