@@ -4,6 +4,7 @@ const {notification} = require('./usuario.controller');
 require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
+const fs = require("fs");
 
 const getPosts = async(req, res, next)=>{
   try {
@@ -88,16 +89,26 @@ const postAdd = async (req, res, next) =>{
 
 const postPublicaciones = async (req, res, next) => {
     const {
-        image,
         title,
         category,
         description,
         tags,} = req.body
       const {token} = req.headers
+
+      const { image = null } = req.files;
+
+  const TYPE_FOTO=image.map(el=>el.path) //mimetype.split("/")[1];
+  console.log("----> mapeado",TYPE_FOTO)
+  // const FOTO_PATH =image.path + "." + TYPE_FOTO;
+  // fs.renameSync(image.path, FOTO_PATH);
+  // console.log("----->",image[0].path);
+  // console.log("----->2",FOTO_PATH);
+
     try {
       const {id} = jwt.verify(token, process.env.SECRET_KEY)
+     
       const newpost =  new post ({
-        image,
+     image:TYPE_FOTO,
         title,
         category,
         description,
@@ -110,6 +121,20 @@ const postPublicaciones = async (req, res, next) => {
       res.send(error)
     }
   };
+const postPhoto =async (req, res)=>{
+
+  
+  const { FOTO = null } = req.files;
+
+  const TYPE_FOTO=FOTO[0].mimetype.split("/")[1];
+  const FOTO_PATH =FOTO[0].path + "." + TYPE_FOTO;
+  fs.renameSync(FOTO[0].path, FOTO_PATH);
+  console.log(FOTO[0].path);
+  console.log(FOTO_PATH);
+res.json(image)
+
+}
+
   const UpdatePost = async (req, res)=>{
     post.updateOne({
       id:"61e7b2a1c495bb8d2888b1ef"
@@ -183,4 +208,4 @@ const postPublicaciones = async (req, res, next) => {
   }
 
 
-  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts, likePost, commentPost };
+  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts, likePost, commentPost, postPhoto };

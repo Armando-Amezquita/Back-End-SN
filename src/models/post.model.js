@@ -2,7 +2,9 @@ const { Schema, model } = require('mongoose');
 
 const Post = new Schema(
     {
-    image:{ type:String},
+    image:{ type: Array,
+        default: [{}] 
+    },
     title: {type:String},
     category: {type:String},
     comentarios: [{

@@ -50,7 +50,6 @@ const usersAll = async (req, res, next) => {
 		next(error);
 	}
 };
-
 const userByName = async (req, res) => {
 	let { name } = req.params;
 	let expresion = null;
@@ -68,7 +67,6 @@ const userByName = async (req, res) => {
 		console.error(error);
 	}
 };
-
 const userById = async (req, res) => {
 	const { id } = req.params;
 	const { token } = req.headers;
@@ -102,7 +100,6 @@ const userById = async (req, res) => {
 		console.error(error);
 	}
 };
-
 const postUser = async (req, res, next) => {
 	try {
 		const { id, fullname, birthday,	email, profile,	nacionalidad, rol, description,	background_picture } = req.body;
@@ -142,7 +139,6 @@ const postUser = async (req, res, next) => {
 		res.send(error);
 	}
 };
-
 const deleteUser = async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -156,7 +152,6 @@ const deleteUser = async (req, res) => {
 		res.send(error);
 	}
 };
-
 const Updateuser = async (req, res) => {
 	try {
 			const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY);
@@ -211,7 +206,6 @@ const UpdateBackgroundPicture = async (req, res) => {
 		res.send(error);
 	}
 };
-
 const authorization = async (req, res, next) => {
 	try {
 		const { id } = req.body;
@@ -235,7 +229,6 @@ const authorization = async (req, res, next) => {
 		res.send(error);
 	}
 };
-
 const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 	try {
 		if(idSeguido === idPropio){
@@ -281,7 +274,6 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 		console.log(error)	
 	}
 }
-
 const getNotification = async(req, res) => {
 	try {
 		const {token} = req.headers;
@@ -297,7 +289,6 @@ const getNotification = async(req, res) => {
 		res.json(error)
 	}
 }
-
 const deleteNotificationById = async(req,res) => {
 	try {
 		const { idnotification } = req.params; 
@@ -336,7 +327,6 @@ const deleteNotification = async(req,res) => {
 		res.json(error)
 	}
 }
-
 const FollowMe = async (req, res, next) => {
 	const { followMe } = req.body;
 	const {token} = req.headers;
@@ -373,8 +363,6 @@ const FollowMe = async (req, res, next) => {
 		console.log(error);
 	}
 };
-
-
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
