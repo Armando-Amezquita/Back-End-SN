@@ -348,8 +348,10 @@ const FollowMe = async (req, res, next) => {
 		if (user) {
 			if (user.follow.followers.includes(id)) {
 				message = `dejaste de seguir a ${user.fullname}`;
-				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
+				// user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
+				// myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
+				user.follow.followers.filter(ele => ele !== id)
+				myself.follow.followers.filter(ele => ele !== followMe)
 			} else {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
