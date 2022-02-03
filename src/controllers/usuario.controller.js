@@ -324,7 +324,7 @@ const deleteNotification = async(req,res) => {
 		const { id } = jwt.verify(token, process.env.SECRET_KEY);
 		const notifications = await usuario.findOne({ id }, {notifications: 1});
 		if(notifications){
-			notifications.notifications = []
+			notifications.notifications = [];
 			console.log(notifications)
 			await notifications.save();
 			res.json({message: `Se eliminaron las notificaciones `});
@@ -346,10 +346,13 @@ const FollowMe = async (req, res, next) => {
 		const myself = await usuario.findOne({ id });
 		const user = await usuario.findOne({ id: followMe });
 		if (user) {
+			console.log(user)
 			if (user.follow.followers.includes(id)) {
 				message = `dejaste de seguir a ${user.fullname}`;
-				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
+				// user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
+				// myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
+				user.follow.followers.filter(ele => ele !== id)
+				myself.follow.followers.filter(ele => ele !== followMe)
 			} else {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
