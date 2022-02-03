@@ -27,6 +27,38 @@ server.use('/uploads/', express.static('./uploads'));
 server.use('/', routes);
 
 server.set('port', process.env.PORT || 3001);
+
+
+
+
+const http = require('http')
+const { Server } = require('socket.io')
+const ServerHTTP = http.createServer(server);
+
+const io = new Server(ServerHTTP, {
+	cors: {
+		origin: process.env.FRONT_DOMAIN
+	}
+})
+
+
+let users = []
+
+const addUser = (userId, socketId)=>{
+	!users.some(user=>user.userId===userId) && users.push({userId, socketId})
+}
+
+
+io.on("connection", socket =>{
+	console.log(socket.id + "a user conected")
+	socket.on("addUser", userId=>{
+		addUser(userId, socket.id)
+	})
+	io.emit("getUsers", users)
+})
+
+
+
 server.listen(server.get('port'), () => console.log(`I'm in http://localhost:${server.get('port')}`));
 
 
