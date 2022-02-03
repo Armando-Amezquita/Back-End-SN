@@ -14,14 +14,14 @@ router.get('/Id/:id', isAuth, userById);
 router.get('/:name', isAuth, userByName);
 router.get('/', isAuth, usersAll);
 router.post('/', postUser); 
-router.delete('/:id', isAuth, deleteUser);
 router.put('/', isAuth, Updateuser);
 router.put('/updateProfile', isAuth,uploadP, UpdateProfile);
 router.put('/updateBackPicture', isAuth,uploadb, UpdateBackgroundPicture);
 router.put('/updatePostPicture', isAuth,uploadpo, UpdateProfile);
 router.put('/follow', isAuth, FollowMe);
-router.delete('/notifications/:idnotification', isAuth, deleteNotificationById);
 router.delete('/notifications', isAuth, deleteNotification);
+router.delete('/notifications/:idnotification', isAuth, deleteNotificationById);
+router.delete('/:id', isAuth, deleteUser);
 // router.get('/notification', isAuth, notification);
 
 // router.post('/notification', isAuth, notificationDelete);

@@ -77,7 +77,6 @@ const userById = async (req, res) => {
 		if(id===payload.id)return res.json(null);
 		if(req.query.follow==='true'){
 			const {follow:{followers, follows}} = await usuario.findOne({id}, {follow:1})
-			console.log(follows, followers)
 			let response = {
 				follows: [],
 				followers:[]
@@ -244,7 +243,6 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 		}
 		const {fullname} = await usuario.findOne({ id: idPropio }, {fullname: 1});
 		const userFollow = await usuario.findOne({ id: idSeguido });
-		console.log(fullname, userFollow) 
 		switch (type) {
 			case 'comment':
 				const messageCommentData = {
@@ -324,9 +322,10 @@ const deleteNotification = async(req,res) => {
 	try {
 		const { token } = req.headers;
 		const { id } = jwt.verify(token, process.env.SECRET_KEY);
-		const {notifications} = await usuario.findOne({ id }, {notifications: 1});
+		const notifications = await usuario.findOne({ id }, {notifications: 1});
 		if(notifications){
-			notifications.push([]);
+			notifications.notifications = []
+			console.log(notifications)
 			await notifications.save();
 			res.json({message: `Se eliminaron las notificaciones `});
 		}else{
