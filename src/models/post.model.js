@@ -7,12 +7,12 @@ const Post = new Schema(
     },
     title: {type:String},
     category: {type:String},
-    comentarios: [{
+    comentarios: [({
         id: String,
         fullname: String,
         profile: String,
         comentario: String
-    },
+    }),
     {
         timestamps: true
     }
