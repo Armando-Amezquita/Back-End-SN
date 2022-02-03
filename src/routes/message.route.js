@@ -1,28 +1,9 @@
-const { register, login } = require("../controllers/auth.controller");
-const messageModel = require("../models/message.model");
 const router = require("express").Router();
-
+const {newMessage, getMessages} = require('../controllers/message.controller')
 //ADD
-router.post("/", async(req, res, next)=>{
-    try {
-        const newMessage = new messageModel({...req.body})
-        await newMessage.save()
-        res.status(200).json(newMessage)
-    } catch (error) {
-        res.send(error)
-    }
-});
+router.post("/", newMessage);
 
 //GET
-router.get("/:conversationId", async(req, res, next)=>{
-    try {
-        const messages = await messageModel.find({
-            conversationId: req.params.conversationId
-        })
-        res.json(messages)
-    } catch (error) {
-        res.send(error)
-    }
-});
+router.get("/:conversationId", getMessages);
 
 module.exports = router;
