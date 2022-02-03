@@ -12,7 +12,7 @@ const usersAll = async (req, res, next) => {
 
 		if(req.query.myId==='true'){
 			if(req.query.fastProfile==='true'){
-				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1, fullname:1})
+				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1, fullname:1, rol})
 				return res.json({message:"fastProfile", data:fastData})
 			}
 			return res.json({message:"Solo tu id", id})
