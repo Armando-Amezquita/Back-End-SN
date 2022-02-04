@@ -352,17 +352,25 @@ const FollowMe = async (req, res, next) => {
 		} else {
 			res.json({ message: 'No existe el usuario' });
 		}
-
-		// await usuario.updateOne({_id:id},
-		// 	{
-		// 		$push:{
-		// 			"follow.followers":  flows
-		// 		}
-		// 	})
 	} catch (error) {
 		console.log(error);
 	}
 };
+
+// const userRol = (id) => {
+// 	const {token} = req.headers;
+// 	const { id } = jwt.verify(token,process.env.SECRET_KEY);
+// 	const user = await usuario.findOne({ id });
+// 	switch (user.rol) {
+// 		case 'estudiante':
+			
+// 			break;
+	
+// 		default:
+// 			break;
+// 	}
+// }
+
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
