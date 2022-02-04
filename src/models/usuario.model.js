@@ -7,6 +7,12 @@ const usuarios= new Schema({
   nacionalidad: {type:String, default: ""},
   cohorte: [{type:String, default: ""}],
   rol: {type:String, default: ""},
+  report: [{
+    id: String,
+    idReport: String,
+    message: String,
+    createAt: { type: Date, default: Date.now()}
+  }],
   description: {type:String, default: ""},
   background_picture: {type:String, default: "uploads/background_picture/default.jpeg"},
   notifications:[{

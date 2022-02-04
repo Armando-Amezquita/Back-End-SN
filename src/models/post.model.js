@@ -13,7 +13,7 @@ const Post = new Schema(
         profile: String,
         comentario: String,
         createdAt: {type:Date, default: Date.now()}
-     }],
+    }],
     description: {type: String},
     options: {type:String},
     likes: [{

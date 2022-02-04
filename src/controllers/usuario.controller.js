@@ -2,7 +2,7 @@ require('dotenv').config();
 const usuario = require('../models/usuario.model');
 const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
-const {checkList} = require('../fake-data/fakelist')
+const {checkList} = require('../fake-data/fakelist');
 
 const usersAll = async (req, res, next) => {
 	let message=""
@@ -356,6 +356,11 @@ const FollowMe = async (req, res, next) => {
 		console.log(error);
 	}
 };
+
+// - [reporte por acoso,  reporte por malas palabras],
+
+
+
 
 // const userRol = (id) => {
 // 	const {token} = req.headers;
