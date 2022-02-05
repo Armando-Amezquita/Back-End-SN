@@ -3,7 +3,7 @@ const router = Router();
 
 //controller
 const {isAuth} = require('../controllers/usuario.middlewares')
-const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, notification, UpdateProfile, UpdateBackgroundPicture, getNotification, deleteNotification, deleteNotificationById } =require('../controllers/usuario.controller')
+const { usersAll, userByName,userById, postUser, deleteUser, Updateuser, FollowMe, UpdateProfile, UpdateBackgroundPicture, getNotification, deleteNotification, deleteNotificationById, locked } =require('../controllers/usuario.controller')
 const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller')
 
 //routes
@@ -21,6 +21,7 @@ router.put('/follow', isAuth, FollowMe);
 router.delete('/notifications/:idnotification', isAuth, deleteNotificationById);
 router.delete('/notifications', isAuth, deleteNotification);
 router.delete('/:id', isAuth, deleteUser);
+router.put('/locked', isAuth, locked);
 // router.get('/notification', isAuth, notification);
 
 // router.post('/notification', isAuth, notificationDelete);

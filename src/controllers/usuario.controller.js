@@ -3,6 +3,7 @@ const usuario = require('../models/usuario.model');
 const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
 const {checkList} = require('../fake-data/fakelist');
+const res = require('express/lib/response');
 
 const usersAll = async (req, res, next) => {
 	let message=""
@@ -274,6 +275,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 		console.log(error)	
 	}
 }
+
 const getNotification = async(req, res) => {
 	try {
 		const {token} = req.headers;
@@ -376,10 +378,33 @@ const FollowMe = async (req, res, next) => {
 // 	}
 // }
 
+// funcion para bloquear y desbloquear funcionalidades del usuario
+const locked  = async() => {
+	try {
+		const { iduser } = req.body;
+		const { token } = req.headers;
+		const { id } = jwt.verify(token,process.env.SECRET_KEY);
+		const student = await usuario.findOne({ iduser }); 
+		const user = await usuario.findOne({ id });
+		if(user.rol === 'admin'){
+			student.state = false;
+			student.save();
+			res.json({message: `El usuario ${student.name} fue bloquedo`});
+		}
+		else{
+			res.json({message: 'No tiene permisos para realizar esta acción'});
+		}
+	} catch (error) {
+		console.log(error);
+		res.send(error);
+	}
+}
+
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
-	authorization, FollowMe , notification, 
+	authorization, FollowMe ,  
 	UpdateProfile, UpdateBackgroundPicture,
-	getNotification, deleteNotification, deleteNotificationById
+	getNotification, deleteNotification, deleteNotificationById,
+	locked
 };
