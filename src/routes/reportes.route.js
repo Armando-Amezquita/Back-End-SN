@@ -1,7 +1,9 @@
 const router = require("express").Router();
-const { notificacionAdmin } = require('../controllers/reportes.contoller')
+const { newReport, getReports, reports } = require('../controllers/reportes.contoller')
 
-router.post("/", notificacionAdmin);
+router.get("/", getReports);
+router.post("/", newReport);
+router.put("/", reports);
 
 
 module.exports = router;

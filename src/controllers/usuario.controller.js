@@ -266,7 +266,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 					name: fullname.split(' ')[0],
 				}
 				userFollow.notifications.unshift(messageFollowData);
-				break;
+			break;
 			default:
 				break;
 		}
@@ -384,9 +384,9 @@ const locked  = async() => {
 		const { iduser } = req.body;
 		const { token } = req.headers;
 		const { id } = jwt.verify(token,process.env.SECRET_KEY);
-		const student = await usuario.findOne({ iduser }); 
+		const student = await usuario.findOne({ id: iduser }); 
 		const user = await usuario.findOne({ id });
-		if(user.rol === 'admin'){
+		if(user.rol === 'ADMIN'){
 			student.state = false;
 			student.save();
 			res.json({message: `El usuario ${student.name} fue bloquedo`});
@@ -408,3 +408,7 @@ module.exports = {
 	getNotification, deleteNotification, deleteNotificationById,
 	locked
 };
+
+
+
+//validar tipos de reportes, comentarios, personas, 
