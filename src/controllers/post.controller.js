@@ -66,8 +66,9 @@ const getPosts = async(req, res, next)=>{
         allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
       if(req.query.experience === 'true'){
-       const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
-      //  const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
+      //  const  allexperience = allPost.filter((e)=>e.tags.includes('#experience'))
+      //  const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
+       const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
         return res.json(allexperience)
       }
   
@@ -121,7 +122,7 @@ const tagS = tags.split(", ")
         title,
         category,
         description,
-        tags:[tags],
+        tags:[tagS],
         autor:id
       })
     await newpost.save()
