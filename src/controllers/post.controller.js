@@ -65,9 +65,10 @@ const getPosts = async(req, res, next)=>{
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
         allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
-      if(req.query.experience === "true"){
-        allexperience = allPost.filter((e)=e.tags.includes("#"))
-        return allexperience
+      if(req.query.experience === 'true'){
+       const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
+      //  const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
+        return res.json(allexperience)
       }
   
       res.json({message: 'Estos son todos los posts', data: allPost})
