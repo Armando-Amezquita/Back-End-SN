@@ -251,7 +251,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 				case 'like':
 					const messageLikeData = {
 					id: idPropio,
-					content: `le gusto tu post`,
+					content: `le dio me gusta a tu post`,
 					icon: 'uploads/Icons/like.svg',
 					name: fullname.split(' ')[0],
 					idpost: idpost
@@ -261,7 +261,7 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 			case 'follow':
 				const messageFollowData = {
 					id: idPropio,
-					content: `te empezo a seguir`,
+					content: `te empezó a seguir`,
 					icon: 'uploads/Icons/follow.svg',
 					name: fullname.split(' ')[0],
 				}
