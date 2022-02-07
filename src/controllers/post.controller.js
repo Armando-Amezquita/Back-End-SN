@@ -121,7 +121,7 @@ const tagS = tags.split(", ")
         title,
         category,
         description,
-        tags:tagS,
+        tags:[tags],
         autor:id
       })
     await newpost.save()
