@@ -101,7 +101,7 @@ const postPublicaciones = async (req, res, next) => {
         description,
         tags,} = req.body
       const {token} = req.headers
-
+const tagS = tags.split(", ")
       const { image } = req.files;
       let TYPE_FOTO = ""
       if(image){
@@ -121,7 +121,7 @@ const postPublicaciones = async (req, res, next) => {
         title,
         category,
         description,
-        tags:tags,
+        tags:tagS,
         autor:id
       })
     await newpost.save()
