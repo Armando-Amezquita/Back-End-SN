@@ -360,10 +360,6 @@ const FollowMe = async (req, res, next) => {
 };
 
 // - [reporte por acoso,  reporte por malas palabras],
-
-
-
-
 // const userRol = (id) => {
 // 	const {token} = req.headers;
 // 	const { id } = jwt.verify(token,process.env.SECRET_KEY);

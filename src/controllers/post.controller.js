@@ -65,10 +65,10 @@ const getPosts = async(req, res, next)=>{
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
         allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
-      if(req.query.experience === 'true'){
-      //  const  allexperience = allPost.filter((e)=>e.tags.includes('#experience'))
+      if(req.query.experience === "#experience"){
+       const  allexperience = allPost.filter((e)=>e.tags.includes(experience))
       //  const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
-       const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
+      //  const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
         return res.json(allexperience)
       }
   
@@ -100,9 +100,9 @@ const postPublicaciones = async (req, res, next) => {
         title,
         category,
         description,
-        tags,} = req.body
+        tags=tags.split(", ")} = req.body
       const {token} = req.headers
-const tagS = tags.split(", ")
+
       const { image } = req.files;
       let TYPE_FOTO = ""
       if(image){
@@ -122,7 +122,7 @@ const tagS = tags.split(", ")
         title,
         category,
         description,
-        tags:[tagS],
+        tags,
         autor:id
       })
     await newpost.save()
