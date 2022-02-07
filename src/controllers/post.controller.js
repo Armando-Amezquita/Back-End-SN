@@ -66,7 +66,7 @@ const getPosts = async(req, res, next)=>{
         allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
       if(req.query.experience === "#experience"){
-       const  allexperience = allPost.filter((e)=>e.tags.includes(experience))
+       const  allexperience = await allPost.filter((e)=>e.tags.includes(experience))
       //  const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
       //  const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
         return res.json(allexperience)
@@ -100,7 +100,7 @@ const postPublicaciones = async (req, res, next) => {
         title,
         category,
         description,
-        tags=tags.split(", ")} = req.body
+        tags} = req.body
       const {token} = req.headers
 
       const { image } = req.files;
