@@ -5,6 +5,7 @@ require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
 const fs = require("fs");
+const { find } = require('../models/post.model');
 
 const getPosts = async(req, res, next)=>{
   try {
@@ -64,9 +65,14 @@ const getPosts = async(req, res, next)=>{
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
         allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
+      if(req.query.experience === "true"){
+        allexperience = allPost.filter((e)=e.tags.includes("#"))
+        return allexperience
+      }
+  
       res.json({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
-    res.send(error)
+    res.json(error)
   }
 }
 
@@ -210,4 +216,6 @@ res.json(image)
   }
 
 
-  module.exports = { postPublicaciones, UpdatePost, publicacionesXusuario, getPosts, likePost, commentPost, postPhoto };
+  module.exports = { 
+    postPublicaciones, UpdatePost, publicacionesXusuario, 
+    getPosts, likePost, commentPost, postPhoto };
