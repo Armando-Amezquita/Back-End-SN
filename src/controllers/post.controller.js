@@ -95,10 +95,12 @@ const postPublicaciones = async (req, res, next) => {
         tags,} = req.body
       const {token} = req.headers
 
-      const { image = null } = req.files;
-
-  const TYPE_FOTO=image.map(el=>el.path) //mimetype.split("/")[1];
-  console.log("----> mapeado",TYPE_FOTO)
+      const { image } = req.files;
+      let TYPE_FOTO = ""
+      if(image){
+        TYPE_FOTO=image.map(el=>el.path) //mimetype.split("/")[1];
+        console.log("----> mapeado",TYPE_FOTO)
+      }
   // const FOTO_PATH =image.path + "." + TYPE_FOTO;
   // fs.renameSync(image.path, FOTO_PATH);
   // console.log("----->",image[0].path);

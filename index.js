@@ -55,10 +55,10 @@ const removeUser = (socketId)=>{
 io.on('connection', (socket) => {
 //CONNECT	
 	console.log(socket.id + ' a user conected');
+	io.emit('getUsers', users);
 	socket.on('addUser', (userId) => {
 		addUser(userId, socket.id);
 	});
-	io.emit('getUsers', users);
 
 
 //CHAT
