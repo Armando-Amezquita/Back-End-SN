@@ -13,7 +13,7 @@ const usersAll = async (req, res, next) => {
 
 		if(req.query.myId==='true'){
 			if(req.query.fastProfile==='true'){
-				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1, fullname:1, rol:1})
+				const fastData = await usuario.findOne({id}, {profile:1, cohorte:1, id:1, email:1, fullname:1, rol:1, state:1})
 				return res.json({message:"fastProfile", data:fastData})
 			}
 			return res.json({message:"Solo tu id", id})
@@ -379,7 +379,7 @@ const FollowMe = async (req, res, next) => {
 // }
 
 // funcion para bloquear y desbloquear funcionalidades del usuario
-const locked  = async() => {
+const locked  = async(req, res) => {
 	try {
 		const { iduser } = req.body;
 		const { token } = req.headers;
