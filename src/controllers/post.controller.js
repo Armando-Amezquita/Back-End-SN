@@ -65,10 +65,9 @@ const getPosts = async(req, res, next)=>{
         const {follow:{follows}} = await usuarioModel.findOne({id}, {"follow.follows":1})
         allPost = allPost.filter((e)=>(follows.includes(e.autorData[0].id) || e.autorData[0].id===id))
       }
-      if(req.query.experience === "#experience"){
-       const  allexperience = await allPost.filter((e)=>e.tags.includes(experience))
-      //  const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
-      //  const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#")))
+      if(req.query.experience === "true"){
+       const  allexperience =  allPost.filter(e =>e.tags.includes("#experience"))
+     
         return res.json(allexperience)
       }
   
@@ -122,7 +121,7 @@ const postPublicaciones = async (req, res, next) => {
         title,
         category,
         description,
-        tags,
+        tags:tags.flat(),
         autor:id
       })
     await newpost.save()
