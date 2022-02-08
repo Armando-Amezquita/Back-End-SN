@@ -216,17 +216,21 @@ res.json(image)
     }
   }
 const notificationReport = async(req, res)=>{
-  const { idUser, message } = req.body
   const { token } = req.headers
   try {
+    const { idUser,message } = req.body
     const {id} = jwt.verify(token, process.env.SECRET_KEY)
-    const user = await usuarioModel.findOne({idUser});
-    if (user) {
-   const Updateuser = usuarioModel.updateOne()
-			
-		} else {
-			res.json({ message: 'No existe el usuario' });
-		}
+    const user = await usuarioModel.findOne({id:idUser});
+if (user) {
+  user.report.unshift({id, message});
+  await user.save();
+
+  res.json({message: 'Se reportado'});
+  
+}else{
+  res.json({message: 'no se ha reportado'});
+}
+ 
   } catch (error) {
     console.log(error)
   }

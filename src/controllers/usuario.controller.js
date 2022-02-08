@@ -45,6 +45,10 @@ const usersAll = async (req, res, next) => {
 			users = users.filter((e) => !myself.follow.followers.includes(e.id));
 			message += users.length?"Estas son las personas que aun no te siguen":"Eres muy popular"
 		}
+		if(req.query.locked==='true'){
+			users = users.filter((e) => e.report.length>0);
+			message += users.length?"Estas son las personas tienen pendiente a solucionar su bloqueo":"no tiene reportes"
+		}
 		res.json({message, data:users});
 	} catch (error) {
 		res.send(error)
@@ -266,6 +270,15 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 					name: fullname.split(' ')[0],
 				}
 				userFollow.notifications.unshift(messageFollowData);
+			break;
+			case 'report':
+				const reportFollowData = {
+					id: idPropio,
+					content: `Han reportado a una persona`,
+					icon: 'uploads/Icons/follow.svg',
+					name: fullname.split(' ')[0],
+				}
+				userFollow.notifications.unshift(reportFollowData);
 			break;
 			default:
 				break;
