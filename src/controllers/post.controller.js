@@ -49,7 +49,7 @@ const getPosts = async(req, res, next)=>{
         allPost = allPost.filter(e=>e.autorData[0].id!==id)
       }
       if(req.query.myself==='true'){
-        allPost = allPost.filter(e=>e.autorData[0].id===id)
+        allPost = allPost.filter(e=>e.autorData[0].id===id & e.tags.length ===0)
       }
       if(req.query.userid!==undefined){
         allPost = allPost.filter(e=>e.autorData[0].id===req.query.userid)
@@ -110,24 +110,32 @@ const postPublicaciones = async (req, res, next) => {
         TYPE_FOTO=image.map(el=>el.path) //mimetype.split("/")[1];
         console.log("----> mapeado",TYPE_FOTO)
       }
-  // const FOTO_PATH =image.path + "." + TYPE_FOTO;
-  // fs.renameSync(image.path, FOTO_PATH);
-  // console.log("----->",image[0].path);
-  // console.log("----->2",FOTO_PATH);
-
     try {
       const {id} = jwt.verify(token, process.env.SECRET_KEY)
-     
+     if(tags){
       const newpost =  new post ({
-     image:TYPE_FOTO,
+        image:TYPE_FOTO,
         title,
         category,
         description,
         tags:("#experience, "+tags),
         autor:id
       })
-    await newpost.save()
+      await newpost.save()
       res.json({message:"Se ha publicado correctamente"});
+    }else{
+        const newpost2 =  new post ({
+          image:TYPE_FOTO,
+             title,
+             category,
+             description,
+             tags,
+             autor:id
+           })
+
+           await newpost2.save()
+           res.json({message:"Se ha publicado correctamente"});
+      }
     } catch (error) {
       res.send(error)
     }
