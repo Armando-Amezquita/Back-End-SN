@@ -383,9 +383,15 @@ const locked  = async(req, res) => {
 		const student = await usuario.findOne({ id: iduser }); 
 		const user = await usuario.findOne({ id });
 		if(user.rol === 'ADMIN'){
-			student.state = false;
-			student.save();
-			res.json({message: `El usuario ${student.name} fue bloquedo`});
+			if(student.state == true){
+				student.state = false;
+				student.save();
+				res.json({message: `El usuario ${student.fullname} fue bloquedo`});
+			}else{
+				student.state = true;
+				student.save();
+				res.json({message: `El usuario ${student.fullname} fue desbloquedo`});
+			}
 		}
 		else{
 			res.json({message: 'No tiene permisos para realizar esta acción'});

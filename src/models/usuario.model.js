@@ -26,8 +26,7 @@ const usuarios= new Schema({
     { name: String, 
       link: String 
     }],
-  activity: 
-      { 
+  activity: { 
         likes:[{idpost:String, title: String}],
         post:[{idpost:String, title: String}],
         comments:[{idPost:String, idcomment:String, content:String}]

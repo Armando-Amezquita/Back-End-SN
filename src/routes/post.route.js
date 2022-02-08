@@ -9,7 +9,7 @@ var cpUpload = upload.fields([
 
 
 //controller
-const { postPublicaciones, UpdatePost, publicacionesXusuario, likePost, commentPost } =require('../controllers/post.controller');
+const { postPublicaciones, UpdatePost, publicacionesXusuario, likePost, commentPost, notificationReport } =require('../controllers/post.controller');
 const { isAuth } = require('../controllers/usuario.middlewares');
 const { getPosts } = require('../controllers/post.controller');
 const { uploadpo } =require('../controllers/upload.controller')
@@ -25,6 +25,7 @@ router.put('/update', isAuth, UpdatePost)
 router.get('/varios', isAuth, publicacionesXusuario)
 router.put('/likes', isAuth, likePost);
 router.post('/comentarios', isAuth, commentPost)
+router.put('/notification', isAuth,notificationReport)
 // router.put('/comments', isAuth, getPutLike);
 
 

@@ -67,9 +67,6 @@ const getPosts = async(req, res, next)=>{
       }
       if(req.query.experience==="true"){
        const  allexperience =  allPost.filter(e=> e.tags.flat().join(", ").split(",").includes("#experience"))
-       
-      //  const  allexperience = allPost.filter((e)=>e.tags.includes("#experience"))
-      //  const  allexperience = allPost.filter((e)=>e.tags.some(x=>x.includes("#experience")))
         return res.json(allexperience)
       }
   
@@ -79,7 +76,6 @@ const getPosts = async(req, res, next)=>{
     console.log(error)
   }
 }
-
 const postAdd = async (req, res, next) =>{
     const {token, image, title, category, comentarios, description, options, fecha_creacion, fecha_modificacion, like,tags} = req.body
     // const dataPost = req.body;
@@ -94,7 +90,6 @@ const postAdd = async (req, res, next) =>{
     }
     
 }
-
 const postPublicaciones = async (req, res, next) => {
     const {
         title,
@@ -152,7 +147,6 @@ const postPhoto =async (req, res)=>{
 res.json(image)
 
 }
-
   const UpdatePost = async (req, res)=>{
     post.updateOne({
       id:"61e7b2a1c495bb8d2888b1ef"
@@ -161,7 +155,6 @@ res.json(image)
     }
     )
   }
-
   const publicacionesXusuario = async (req, res) =>{
     const resultado = await post.aggregate(
     [
@@ -179,7 +172,6 @@ res.json(image)
     ])
     res.json(resultado)
   }
-
   const likePost = async(req, res) => {
     try {
       const { idpost } = req.body; // Butoon dispara la accion
@@ -204,7 +196,6 @@ res.json(image)
       res.send(error);
     }
   }
-
   const commentPost = async(req,res) => {
     try {
       //id de la persona nombre y foto 
@@ -225,9 +216,22 @@ res.json(image)
     }
   }
 const notificationReport = async(req, res)=>{
-
+  const { idUser, message } = req.body
+  const { token } = req.headers
+  try {
+    const {id} = jwt.verify(token, process.env.SECRET_KEY)
+    const user = await usuarioModel.findOne({idUser});
+    if (user) {
+   const Updateuser = usuarioModel.updateOne()
+			
+		} else {
+			res.json({ message: 'No existe el usuario' });
+		}
+  } catch (error) {
+    console.log(error)
+  }
 }
 
   module.exports = { 
     postPublicaciones, UpdatePost, publicacionesXusuario, 
-    getPosts, likePost, commentPost, postPhoto };
+    getPosts, likePost, commentPost, postPhoto, notificationReport };
