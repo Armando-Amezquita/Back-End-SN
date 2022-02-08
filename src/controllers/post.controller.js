@@ -221,14 +221,14 @@ const notificationReport = async(req, res)=>{
     const { idUser,message } = req.body
     const {id} = jwt.verify(token, process.env.SECRET_KEY)
     const user = await usuarioModel.findOne({id:idUser});
-if (user) {
+if (user.report.length < 1) {
+  console.log(user.report.length)
   user.report.unshift({id, message});
   await user.save();
-
-  res.json({message: 'Se reportado'});
-  
+  res.json({message: `Se ha reportado a: ${user.fullname} ` });
+  notification(`${user.fullname}`, id, 'like');
 }else{
-  res.json({message: 'no se ha reportado'});
+  res.json({message: 'no se puede reportar mas de 1 vez'});
 }
  
   } catch (error) {
