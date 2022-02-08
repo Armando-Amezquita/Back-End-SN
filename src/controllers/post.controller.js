@@ -9,7 +9,7 @@ const { find } = require('../models/post.model');
 
 const getPosts = async(req, res, next)=>{
   try {
-    const {id} = jwt.verify(req.headers.token, process.env.SECRET_KEY)
+    const { id } = jwt.verify(req.headers.token, process.env.SECRET_KEY)
     let allPost = await post.aggregate([
       {
         $lookup:{
@@ -49,8 +49,8 @@ const getPosts = async(req, res, next)=>{
         allPost = allPost.filter(e=>e.autorData[0].id!==id)
       }
       if(req.query.myself==='true'){
-        allPost = allPost.filter(e=>e.autorData[0].id===id & e.tags.length ===0)
-      }
+        allPost = allPost.filter(e=>e.autorData[0].id===id && e.tags.length == 0)
+        }
       if(req.query.userid!==undefined){
         allPost = allPost.filter(e=>e.autorData[0].id===req.query.userid)
       }
@@ -76,10 +76,9 @@ const getPosts = async(req, res, next)=>{
       res.json({message: 'Estos son todos los posts', data: allPost})
   } catch (error) {
     res.json(error)
+    console.log(error)
   }
 }
-
-
 
 const postAdd = async (req, res, next) =>{
     const {token, image, title, category, comentarios, description, options, fecha_creacion, fecha_modificacion, like,tags} = req.body
@@ -124,7 +123,7 @@ const postPublicaciones = async (req, res, next) => {
       await newpost.save()
       res.json({message:"Se ha publicado correctamente"});
     }else{
-        const newpost2 =  new post ({
+        const newpost =  new post ({
           image:TYPE_FOTO,
              title,
              category,
@@ -133,7 +132,7 @@ const postPublicaciones = async (req, res, next) => {
              autor:id
            })
 
-           await newpost2.save()
+           await newpost.save()
            res.json({message:"Se ha publicado correctamente"});
       }
     } catch (error) {
@@ -225,7 +224,9 @@ res.json(image)
       res.send(error);
     }
   }
+const notificationReport = async(req, res)=>{
 
+}
 
   module.exports = { 
     postPublicaciones, UpdatePost, publicacionesXusuario, 
