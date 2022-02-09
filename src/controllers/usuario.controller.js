@@ -432,12 +432,12 @@ const deletelocked = async(req,res) => {
 	}
 }
 const createUser = async(req, res) =>{
-    const { correo, CreatedFor } = req.body
+    const { email  } = req.body
       const {token} = req.headers
 
     try {
       const {id} = jwt.verify(token, process.env.SECRET_KEY)
-        const newuser =  new userAutorize ({correo, id:CreatedFor})
+        const newuser =  new userAutorize ({correo: email, id})
       await newuser.save()
       res.json({message:"Se ha creado correo"});
     
