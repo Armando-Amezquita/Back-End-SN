@@ -68,6 +68,8 @@ const getPosts = async(req, res, next)=>{
       if(req.query.experience==="true"){
        const  allexperience =  allPost.filter(e=> e.tags.flat().join(", ").split(",").includes("#experience"))
         return res.json(allexperience)
+      }else{
+        allPost = allPost.filter((e)=>!e.tags.flat().join(", ").includes("#experience"))
       }
   
       res.json({message: 'Estos son todos los posts', data: allPost})
