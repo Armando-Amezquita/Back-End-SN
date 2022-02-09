@@ -2,7 +2,7 @@ const {Schema, model} = require('mongoose')
 
 const userAutorizeSchema = new Schema(
   {
-    correo: {type: String},
+    email: {type: String},
     CreatedFor:{type:String},
     state: {
         type:Boolean,

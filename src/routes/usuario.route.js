@@ -13,7 +13,7 @@ const { uploadP, uploadb, uploadpo } =require('../controllers/upload.controller'
 // router.get('/login', login);
 
 router.get('/henry',isAuth, userRegister)
-router.get('/notifications', isAuth, getNotification);
+// router.get('/notifications', isAuth, getNotification);
 router.get('/Id/:id', isAuth, userById);
 router.get('/:name', isAuth, userByName);
 router.get('/', isAuth, usersAll);

@@ -4,7 +4,8 @@ const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
 const {checkList} = require('../fake-data/fakelist');
 const res = require('express/lib/response');
-const userAutorize = require('../models/userAutorize.model')
+const userAutorize = require('../models/userAutorize.model');
+const usuarioModel = require('../models/usuario.model');
 
 
 
@@ -131,14 +132,14 @@ const postUser = async (req, res, next) => {
 				});
 				await newUsuario.save();
 				if(checkList(email)){
-					const token = jwt.sign({ id: newUsuario.id, email: newUsuario.email }, process.env.SECRET_KEY, { expiresIn: '1d' });
+					const token = jwt.sign({ id: newUsuario.id}, process.env.SECRET_KEY, { expiresIn: '1d' });
 					return res.json({ message: 'Se ha registrado satisfactoriamente', data: token });
 				}
 				return res.json({message: "usted no pertence a HENRY", data: false})
 			}
 		} else {
 			if(checkList(email)){
-				const token = jwt.sign({ id: isCreated.id,  email: newUsuario.email }, process.env.SECRET_KEY, { expiresIn: '1d' });
+				const token = jwt.sign({ id: isCreated.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
 				return res.json({ message: 'El usuario ya existe', data: token });
 			}
 			return res.json({message: "usted no pertence a HENRY", data: false})
@@ -437,7 +438,7 @@ const createUser = async(req, res) =>{
 
     try {
       const {id} = jwt.verify(token, process.env.SECRET_KEY)
-        const newuser =  new userAutorize ({correo: email, id})
+        const newuser =  new userAutorize ({ email, id})
       await newuser.save()
       res.json({message:"Se ha creado correo"});
     
@@ -446,20 +447,18 @@ const createUser = async(req, res) =>{
     }
 }
 const userRegister = async(req, res) =>{
-      const {token} = req.headers
-    try {
-      const {email} = jwt.verify(token, process.env.SECRET_KEY)
-	  console.log(email)
-      const user = await userAutorize.findOne({ correo: email})
-	  if (user) {
-		  console.log(true)
-return res.json({authorized: true})
-
+	try {
+		const {token} = req.headers
+      const {id} = jwt.verify(token, process.env.SECRET_KEY)
+	  const res =await usuario.findOne({ id: id })
+	 const email =res.email
+      const user = await userAutorize.findOne({ email: email})
+	  console.log(user.email.length)
+	  if (user.email.length) {
+ return res.json({authorized: true})
 		}else{
-	return		res.json({authorized: false})
+return	res.json({authorized: false})
 		}
- 
-    
     } catch (error) {
       res.send(error)
     }
