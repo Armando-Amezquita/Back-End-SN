@@ -271,15 +271,6 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 				}
 				userFollow.notifications.unshift(messageFollowData);
 			break;
-			case 'report':
-				const reportFollowData = {
-					id: idPropio,
-					content: `Han reportado a una persona`,
-					icon: 'uploads/Icons/follow.svg',
-					name: fullname.split(' ')[0],
-				}
-				userFollow.notifications.unshift(reportFollowData);
-			break;
 			default:
 				break;
 		}
@@ -414,14 +405,36 @@ const locked  = async(req, res) => {
 		res.send(error);
 	}
 }
-
+const deletelocked = async(req,res) => {
+	const { idDisloked } = req.body
+	try {
+		const { token } = req.headers;
+		const { id } = jwt.verify(token,process.env.SECRET_KEY);
+		const student = await usuario.findOne({ id: idDisloked }); 
+		
+		const user = await usuario.findOne({ id });
+		if(user.rol === 'ADMIN'){
+			if(student.report.state == false){
+				student.report.state = true;
+				student.save();
+				res.json({message: `El usuario ${student.fullname} fue bloquedo`});
+			}
+		}
+		else{
+			res.json({message: 'No tiene permisos para realizar esta acción'});
+		}
+	} catch (error) {
+		console.log(error)
+		res.json(error)
+	}
+}
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe ,  
 	UpdateProfile, UpdateBackgroundPicture,
 	getNotification, deleteNotification, deleteNotificationById,
-	locked
+	locked, deletelocked
 };
 
 

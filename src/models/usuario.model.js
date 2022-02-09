@@ -11,6 +11,7 @@ const usuarios= new Schema({
     id: String,
     idReport: String,
     message: String,
+    state: {type:Boolean, default:true},
     createAt: { type: Date, default: Date.now()}
   }],
   description: {type:String, default: ""},
