@@ -4,6 +4,7 @@ const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
 const {checkList} = require('../fake-data/fakelist');
 const res = require('express/lib/response');
+const userAutorize = require('../models/userAutorize.model')
 
 const usersAll = async (req, res, next) => {
 	let message=""
@@ -428,13 +429,28 @@ const deletelocked = async(req,res) => {
 		res.json(error)
 	}
 }
+const createUser = async(req, res) =>{
+    const { email, CreatedFor } = req.body
+      const {token} = req.headers
+
+    try {
+      const {id} = jwt.verify(token, process.env.SECRET_KEY)
+        const newuser =  new userAutorize ({email, CreatedFor:id})
+      await newuser.save()
+      res.json({message:"Se ha creado correo"});
+    
+    } catch (error) {
+      res.send(error)
+    }
+}
+
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe ,  
 	UpdateProfile, UpdateBackgroundPicture,
 	getNotification, deleteNotification, deleteNotificationById,
-	locked, deletelocked
+	locked, deletelocked, createUser
 };
 
 

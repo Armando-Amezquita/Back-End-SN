@@ -223,18 +223,55 @@ const notificationReport = async(req, res)=>{
     const { idUser,message } = req.body
     const {id} = jwt.verify(token, process.env.SECRET_KEY)
     const user = await usuarioModel.findOne({id:idUser});
-if (user.report.length < 1) {
+if (user.report.length <= 20) {
   console.log(user.report.length)
   user.report.unshift({id, message});
   await user.save();
   res.json({message: `Se ha reportado a: ${user.fullname} ` });
-  notification(`${user.fullname}`, id, 'like');
+  notificationR(user.id, 'comment');
 }else{
   res.json({message: 'no se puede reportar mas de 1 vez'});
 }
- 
   } catch (error) {
     console.log(error)
+  }
+}
+
+const notificationR = async( idreporter, type) => {
+  try {
+    const {fullname} = await usuarioModel.findOne({ id: idreporter }, {fullname: 1});
+    // console.log("id --->", fullname)
+    
+      const admins = await usuarioModel.findOne({ rol: 'ADMIN'});
+      // console.log("---->",admins)
+      switch (type) {
+          case 'comment':
+              const messageCommentData = {
+                  idreporter,
+                  content: `Se reporto por un comentario`,
+                  icon: 'uploads/Icons/reports.svg',
+                  name: fullname.split(' ')[0]
+      }
+               // admins.notifications.unshift(messageCommentData);
+               console.log("------>", admins.notifications)
+               admins.notifications.unshift(messageCommentData);
+          break;
+          case 'person':
+              const messagePersonData = {
+                  
+                  idreporter,
+                  message: `Se reporto por una persona`,
+        icon: 'uploads/Icons/reports.svg',
+              }
+               admins.map(ele => ele.notifications.push(messagePersonData));
+                await admins.save()
+              res.send('se ha reportado una persona')
+          default:
+              break;
+      }
+      await admins.save(); 
+  } catch (error) {
+      console.log(error);
   }
 }
 
