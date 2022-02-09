@@ -6,6 +6,8 @@ const {checkList} = require('../fake-data/fakelist');
 const res = require('express/lib/response');
 const userAutorize = require('../models/userAutorize.model')
 
+
+
 const usersAll = async (req, res, next) => {
 	let message=""
 	try {
@@ -129,14 +131,14 @@ const postUser = async (req, res, next) => {
 				});
 				await newUsuario.save();
 				if(checkList(email)){
-					const token = jwt.sign({ id: newUsuario.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+					const token = jwt.sign({ id: newUsuario.id, email: newUsuario.email }, process.env.SECRET_KEY, { expiresIn: '1d' });
 					return res.json({ message: 'Se ha registrado satisfactoriamente', data: token });
 				}
 				return res.json({message: "usted no pertence a HENRY", data: false})
 			}
 		} else {
 			if(checkList(email)){
-				const token = jwt.sign({ id: isCreated.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+				const token = jwt.sign({ id: isCreated.id,  email: newUsuario.email }, process.env.SECRET_KEY, { expiresIn: '1d' });
 				return res.json({ message: 'El usuario ya existe', data: token });
 			}
 			return res.json({message: "usted no pertence a HENRY", data: false})
@@ -430,12 +432,12 @@ const deletelocked = async(req,res) => {
 	}
 }
 const createUser = async(req, res) =>{
-    const { email, CreatedFor } = req.body
+    const { correo, CreatedFor } = req.body
       const {token} = req.headers
 
     try {
       const {id} = jwt.verify(token, process.env.SECRET_KEY)
-        const newuser =  new userAutorize ({email, CreatedFor:id})
+        const newuser =  new userAutorize ({correo, id:CreatedFor})
       await newuser.save()
       res.json({message:"Se ha creado correo"});
     
@@ -443,14 +445,35 @@ const createUser = async(req, res) =>{
       res.send(error)
     }
 }
+const userRegister = async(req, res) =>{
+      const {token} = req.headers
+    try {
+      const {email} = jwt.verify(token, process.env.SECRET_KEY)
+	  console.log(email)
+      const user = await userAutorize.findOne({ correo: email})
+	  if (user) {
+		  console.log(true)
+return res.json({authorized: true})
 
+		}else{
+	return		res.json({authorized: false})
+		}
+ 
+    
+    } catch (error) {
+      res.send(error)
+    }
+}
+const toto = async(req, res)=>{
+	res.json("aparece hp")
+}
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe ,  
 	UpdateProfile, UpdateBackgroundPicture,
 	getNotification, deleteNotification, deleteNotificationById,
-	locked, deletelocked, createUser
+	locked, deletelocked, createUser, userRegister, toto
 };
 
 

@@ -248,7 +248,7 @@ const notificationR = async( idreporter, type) => {
           case 'comment':
               const messageCommentData = {
                   idreporter,
-                  content: `Se reporto por un comentario`,
+                  content: `Ha sido reportado(a)`,
                   icon: 'uploads/Icons/reports.svg',
                   name: fullname.split(' ')[0]
       }
@@ -258,7 +258,6 @@ const notificationR = async( idreporter, type) => {
           break;
           case 'person':
               const messagePersonData = {
-                  
                   idreporter,
                   message: `Se reporto por una persona`,
         icon: 'uploads/Icons/reports.svg',
