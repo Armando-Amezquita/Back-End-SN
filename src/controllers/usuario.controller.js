@@ -389,9 +389,16 @@ const locked  = async(req, res) => {
 				const mailOptions = {
 			from: 'HenryVerse2022@gmail.com',
 			to:student.email,
-			subject: `Se te ha bloqueado `,
-			text: `Te comunicamos que se te ha bloqueado debido a que se nos
-			ha reportado mal uso de su cuenta`
+			subject: `Se ha bloqueado tu cuenta, aterrizaste en otro lugar `,
+			html: `
+			<div style="font-size: 14px; color: #000;">
+			<img height="300" src="https://dogskll.herokuapp.com/uploads/background_picture/default.jpeg" />
+			<p>Hola <b>${student.fullname.split(" ")[0]}</b>, tu cohete se ha dado de baja por mala conducta, esto puede ser temporal o definitivo.</p>
+			<p>para mas informacion te invitamos a usar nuestros canales de comunicacion</p>
+			<h4>Muchos Exitos<h4>
+			<p style="font-size: 11px; text-align: center;" >Henryverse 2022</p>
+			</div>
+			`
 	  		};
 //ejecuta la fucnion de envio de correo
 			await transporter.sendMail(mailOptions, (error, info)=>error? console.log(error) : console.log('Email enviado: '+info.response));
@@ -402,9 +409,15 @@ const locked  = async(req, res) => {
 				const mailOptions = {
 					from: 'HenryVerse2022@gmail.com',
 					to:student.email,
-					subject: `Se te ha bloqueado `,
-					text: `Te comunicamos que se te ha bloqueado debido a que se nos
-					ha reportado mal uso de su cuenta`
+					subject: `Se ha desbloqueado tu cuenta, vuelve a navegar en Henryverse`,
+					html: `
+					<div style="font-size: 14px; color: #000;">
+					<img height="300" src="https://dogskll.herokuapp.com/uploads/background_picture/default.jpeg" />
+					<p>Hola <b>${student.fullname.split(" ")[0]}</b>, se te ha dado otra oportunidad, vuelve a nuestro universo y expande tu galaxia de amigos</p>
+					<h3>Te Esperamos<h3>
+					<p style="font-size: 11px; text-align: center;" >Henryverse 2022</p>
+					</div>
+					`
 				  };
 				  await transporter.sendMail(mailOptions, (error, info)=>error? console.log(error) : console.log('Email enviado: '+info.response));
 				student.save();
