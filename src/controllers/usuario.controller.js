@@ -474,7 +474,7 @@ module.exports = {
 	authorization, FollowMe ,  
 	UpdateProfile, UpdateBackgroundPicture,
 	getNotification, deleteNotification, deleteNotificationById,
-	locked, deletelocked, createUser, userRegister, toto
+	locked, deletelocked, createUser, userRegister, toto, notification
 };
 
 
