@@ -95,7 +95,7 @@ const newAutorization = async (req, res, next)=>{
     const {email, cohorte} = req.body
     try {
         const isCreated = await autorization.findOne({email})
-        const { fullname } = await usuario.findOne({email},{fullname:1})
+        
         if(!isCreated){
             const auth = new autorization({
              email,
@@ -108,7 +108,7 @@ const newAutorization = async (req, res, next)=>{
 					html: `
 					<div style="font-size: 14px; color: #000;">
 					<img height="300" src="https://dogskll.herokuapp.com/uploads/background_picture/default.jpeg" />
-					<p>Hola <b>${fullname.split(" ")[0]}</b>, ya puedes ingresar a nuestra app y disfruta el viaje <a href="https://social-network-chi.vercel.app/">Henry Network</a> </p>
+					<p>Hola <b>${email}</b>, ya puedes ingresar a nuestra app y disfruta el viaje <a href="https://social-network-chi.vercel.app/">Henry Network</a> </p>
 					<h3>Te Esperamos<h3>
 					<p style="font-size: 11px; text-align: center;" >Henryverse 2022</p>
 					</div>
