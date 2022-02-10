@@ -347,9 +347,10 @@ const FollowMe = async (req, res, next) => {
 		const user = await usuario.findOne({ id: followMe });
 		if (user) {
 			if (user.follow.followers.includes(id)) {
+				console.log("------------->", followMe, user.fullname)
 				message = `dejaste de seguir a ${user.fullname}`;
 				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.followers.indexOf(followMe), 1);
+				myself.follow.follows.splice(user.follow.follows.indexOf(followMe), 1);
 			} else {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
@@ -364,6 +365,7 @@ const FollowMe = async (req, res, next) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.json(error)
 	}
 };
 
