@@ -60,7 +60,7 @@ const notification = async(idreported, idreporter, type) => {
 					message: `Se reporto por un comentario`,
 					icon: 'uploads/Icons/reports.svg',
 				}
-                await admins.map(ele => ele.notifications.push(messageCommentData));
+                 admins.map(ele => ele.notifications.push(messageCommentData));
             break;
             case 'person':
                 const messagePersonData = {
@@ -69,7 +69,7 @@ const notification = async(idreported, idreporter, type) => {
                     message: `Se reporto por una persona`,
 					icon: 'uploads/Icons/reports.svg',
                 }
-                await admins.map(ele => ele.notifications.push(messagePersonData));
+                 admins.map(ele => ele.notifications.push(messagePersonData));
             default:
                 break;
         }
@@ -85,6 +85,7 @@ const cleanReports = async(req, res, next)=>{
         const user = await usuario.findOne({id:iduser})
         user.report = [];
         await user.save()
+        res.json({message: "se limpiarion sus reportes"})
     } catch (error) {
         console.log(error)
         res.send(error)
