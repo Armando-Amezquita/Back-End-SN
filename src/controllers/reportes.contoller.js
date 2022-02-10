@@ -1,10 +1,9 @@
 require('dotenv').config();
 const usuario = require('../models/usuario.model');
-const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
 const report = require('../models/report.model');
+const autorization = require('../models/autorization.model');
 const res = require('express/lib/response');
-
 
 const newReport = async(req,res) => {
     try {
@@ -92,6 +91,30 @@ const cleanReports = async(req, res, next)=>{
     }
 }
 
+const newAutorization = async (req, res, next)=>{
+    const {email, cohorte} = req.body
+    try {
+        const auth = new autorization({
+         email,
+         cohorte   
+        })
+        await auth.save()
+        res.json({message: `${email} autorizado`})
+    } catch (error) {
+        console.log(error)
+        res.json(error)
+    }
+}
+
+const getAutorization = async (req, res, next)=>{
+    try {
+        const auth = await autorization.find()
+        res.json(auth)
+    } catch (error) {
+        console.log(error)
+        res.json(error)
+    }
+}
 module.exports = { 
-    newReport, getReports, reports, cleanReports
+    newReport, getReports, reports, cleanReports, newAutorization, getAutorization
 };
