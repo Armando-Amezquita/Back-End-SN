@@ -79,7 +79,18 @@ const notification = async(idreported, idreporter, type) => {
     }
 }
 
+const cleanReports = async(req, res, next)=>{
+    const {iduser} = req.params;
+    try {
+        const user = await usuario.findOne({id:iduser})
+        user.report = [];
+        await user.save()
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+}
 
 module.exports = { 
-    newReport, getReports, reports
+    newReport, getReports, reports, cleanReports
 };

@@ -20,6 +20,23 @@ const isAuth = (req, res, next)=>{
     }
 }
 
+const isAdmin = async(req, res, next)=>{
+    try {
+        const { id } = jwt.verify(token, process.env.SECRET_KEY)
+        const {rol} = await usuario.findOne({id}, {rol:1})
+        console.log('el rol es: ', rol) 
+        if(rol==='ADMIN'){
+            return next()
+        }
+        else{
+            res.status(400).json({message: "No tienes permisos de ADMIN para realizar este tipo de acciones"})
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
 module.exports = {
-    isAuth
+    isAuth,
+    isAdmin
 }
