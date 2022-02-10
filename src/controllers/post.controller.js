@@ -5,7 +5,7 @@ require("./usuario.controller")
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
 const fs = require("fs");
-const { find } = require('../models/post.model');
+
 
 const getPosts = async(req, res, next)=>{
   try {

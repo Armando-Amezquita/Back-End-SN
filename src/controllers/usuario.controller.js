@@ -6,9 +6,7 @@ const {checkList} = require('../fake-data/fakelist');
 const res = require('express/lib/response');
 const userAutorize = require('../models/userAutorize.model');
 const usuarioModel = require('../models/usuario.model');
-
-
-
+const {transporter} = require('./emailSend.controller')
 const usersAll = async (req, res, next) => {
 	let message=""
 	try {
@@ -283,7 +281,6 @@ const notification = async (idSeguido, idPropio, type, idpost=undefined) => {
 		console.log(error)	
 	}
 }
-
 const getNotification = async(req, res) => {
 	try {
 		const {token} = req.headers;
@@ -393,10 +390,28 @@ const locked  = async(req, res) => {
 		if(user.rol === 'ADMIN'){
 			if(student.state == true){
 				student.state = false;
+				//opciones de a quien va dirigido el correo
+				const mailOptions = {
+			from: 'HenryVerse2022@gmail.com',
+			to:student.email,
+			subject: `Se te ha bloqueado `,
+			text: `Te comunicamos que se te ha bloqueado debido a que se nos
+			ha reportado mal uso de su cuenta`
+	  		};
+//ejecuta la fucnion de envio de correo
+			await transporter.sendMail(mailOptions, (error, info)=>error? console.log(error) : console.log('Email enviado: '+info.response));
 				student.save();
 				res.json({message: `El usuario ${student.fullname} fue bloquedo`});
 			}else{
 				student.state = true;
+				const mailOptions = {
+					from: 'HenryVerse2022@gmail.com',
+					to:student.email,
+					subject: `Se te ha bloqueado `,
+					text: `Te comunicamos que se te ha bloqueado debido a que se nos
+					ha reportado mal uso de su cuenta`
+				  };
+				  await transporter.sendMail(mailOptions, (error, info)=>error? console.log(error) : console.log('Email enviado: '+info.response));
 				student.save();
 				res.json({message: `El usuario ${student.fullname} fue desbloquedo`});
 			}
@@ -453,26 +468,27 @@ const userRegister = async(req, res) =>{
 	  const res =await usuario.findOne({ id: id })
 	 const email =res.email
       const user = await userAutorize.findOne({ email: email})
-	  console.log(user.email.length)
-	  if (user.email.length) {
- return res.json({authorized: true})
+	  console.log(user)
+	  if (user) {
+ 		return res.json({authorized: true})
 		}else{
-return	res.json({authorized: false})
+		return	res.json({authorized: false})
 		}
     } catch (error) {
       res.send(error)
     }
 }
-const toto = async(req, res)=>{
-	res.json("aparece hp")
-}
+
+
+
+
 module.exports = { 
 	usersAll, userByName, userById, 
 	postUser, deleteUser, Updateuser, 
 	authorization, FollowMe ,  
 	UpdateProfile, UpdateBackgroundPicture,
 	getNotification, deleteNotification, deleteNotificationById,
-	locked, deletelocked, createUser, userRegister, toto
+	locked, deletelocked, createUser, userRegister
 };
 
 
