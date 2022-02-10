@@ -345,12 +345,11 @@ const FollowMe = async (req, res, next) => {
 		const { id } = jwt.verify(token,process.env.SECRET_KEY)
 		const myself = await usuario.findOne({ id });
 		const user = await usuario.findOne({ id: followMe });
-		if (user) {
 			if (user.follow.followers.includes(id)) {
 				console.log("------------->", followMe, user.fullname)
 				message = `dejaste de seguir a ${user.fullname}`;
 				user.follow.followers.splice(user.follow.followers.indexOf(id), 1);
-				myself.follow.follows.splice(user.follow.follows.indexOf(followMe), 1);
+				myself.follow.follows.splice(myself.follow.follows.indexOf(followMe), 1);
 			} else {
 				message = `seguiste a ${user.fullname}`;
 				user.follow.followers.push(id);
@@ -360,9 +359,6 @@ const FollowMe = async (req, res, next) => {
 			await user.save();
 			await myself.save();
 			res.json({ message });
-		} else {
-			res.json({ message: 'No existe el usuario' });
-		}
 	} catch (error) {
 		console.log(error);
 		res.json(error)
