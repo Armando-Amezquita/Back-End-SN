@@ -95,7 +95,7 @@ const newAutorization = async (req, res, next)=>{
     const {email, cohorte} = req.body
     try {
         const isCreated = await autorization.findOne({email})
-        if(isCreated){
+        if(!isCreated){
             const auth = new autorization({
              email,
              cohorte   
