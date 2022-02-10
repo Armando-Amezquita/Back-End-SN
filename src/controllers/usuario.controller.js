@@ -49,6 +49,7 @@ const usersAll = async (req, res, next) => {
 		}
 		if(req.query.locked==='true'){
 			users = users.filter((e) => e.report.length>0);
+			if(!users.length)return res.json({data:["¡Que alivio, no han habido conflictos!"]})
 			message += users.length?"Estas son las personas tienen pendiente a solucionar su bloqueo":"no tiene reportes"
 		}
 		res.json({message, data:users});
