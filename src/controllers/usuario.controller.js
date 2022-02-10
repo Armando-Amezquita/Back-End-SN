@@ -1,12 +1,12 @@
 require('dotenv').config();
 const usuario = require('../models/usuario.model');
-const post = require('../models/post.model');
 const jwt = require('jsonwebtoken');
 const {checkList} = require('../fake-data/fakelist');
-const res = require('express/lib/response');
 const userAutorize = require('../models/userAutorize.model');
-const usuarioModel = require('../models/usuario.model');
 const {transporter} = require('./emailSend.controller')
+const autorization = require("../models/autorization.model")
+
+
 const usersAll = async (req, res, next) => {
 	let message=""
 	try {
@@ -112,7 +112,8 @@ const postUser = async (req, res, next) => {
 	try {
 		const { id, fullname, birthday,	email, profile,	nacionalidad, rol, description,	background_picture } = req.body;
 		const isCreated = await usuario.findOne({ id: id });
-		if (!isCreated) {
+		const isAuth = await autorization.findOne({email})
+		if (isAuth && !isCreated) {
 			if (!id || !fullname || !email) {
 				return res.json({ message: 'Se deben llenar todos los campos requeridos' });
 			} else {
@@ -123,24 +124,20 @@ const postUser = async (req, res, next) => {
 					email: email.toLowerCase(),
 					profile,
 					nacionalidad,
-					cohorte:checkList(email)?checkList(email):"",
+					cohorte:isAuth.cohorte,
 					rol,
 					description,
 					background_picture,
-					state: checkList(email)?true:false
+					state: true
 				});
 				await newUsuario.save();
-				if(checkList(email)){
 					const token = jwt.sign({ id: newUsuario.id}, process.env.SECRET_KEY, { expiresIn: '1d' });
 					return res.json({ message: 'Se ha registrado satisfactoriamente', data: token });
-				}
-				return res.json({message: "usted no pertence a HENRY", data: false})
 			}
-		} else {
-			if(checkList(email)){
+		} else if (isAuth && isCreated) {
 				const token = jwt.sign({ id: isCreated.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
 				return res.json({ message: 'El usuario ya existe', data: token });
-			}
+		} else {
 			return res.json({message: "usted no pertence a HENRY", data: false})
 		}
 	} catch (error) {
