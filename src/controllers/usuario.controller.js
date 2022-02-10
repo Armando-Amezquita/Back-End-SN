@@ -1,7 +1,6 @@
 require('dotenv').config();
 const usuario = require('../models/usuario.model');
 const jwt = require('jsonwebtoken');
-const {checkList} = require('../fake-data/fakelist');
 const userAutorize = require('../models/userAutorize.model');
 const {transporter} = require('./emailSend.controller')
 const autorization = require("../models/autorization.model")

@@ -94,12 +94,16 @@ const cleanReports = async(req, res, next)=>{
 const newAutorization = async (req, res, next)=>{
     const {email, cohorte} = req.body
     try {
-        const auth = new autorization({
-         email,
-         cohorte   
-        })
-        await auth.save()
-        res.json({message: `${email} autorizado`})
+        const isCreated = await autorization.findOne({email})
+        if(isCreated){
+            const auth = new autorization({
+             email,
+             cohorte   
+            })
+            await auth.save()
+            return res.json({message: `${email} autorizado`})
+        }
+        res.json({message: `${email} ya está autorizado`})
     } catch (error) {
         console.log(error)
         res.json(error)
