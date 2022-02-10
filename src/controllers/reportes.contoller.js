@@ -80,8 +80,8 @@ const notification = async(idreported, idreporter, type) => {
 }
 
 const cleanReports = async(req, res, next)=>{
+    const {iduser} = req.params;
     try {
-        const {iduser} = req.params;
         const user = await usuario.findOne({id:iduser})
         user.report = [];
         await user.save()
