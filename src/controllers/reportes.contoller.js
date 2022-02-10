@@ -3,7 +3,7 @@ const usuario = require('../models/usuario.model');
 const jwt = require('jsonwebtoken');
 const report = require('../models/report.model');
 const autorization = require('../models/autorization.model');
-const res = require('express/lib/response');
+const { transporter } = require('./emailSend.controller')
 
 const newReport = async(req,res) => {
     try {
@@ -95,11 +95,27 @@ const newAutorization = async (req, res, next)=>{
     const {email, cohorte} = req.body
     try {
         const isCreated = await autorization.findOne({email})
+        const { fullname } = await usuario.findOne({email},{fullname:1})
         if(!isCreated){
             const auth = new autorization({
              email,
              cohorte   
             })
+            const mailOptions = {
+                from: 'admisiones@soyhenry.com',
+					to:email,
+					subject: `Ya eres pate de nuestra comunidad, ingresa ya`,
+					html: `
+					<div style="font-size: 14px; color: #000;">
+					<img height="300" src="https://dogskll.herokuapp.com/uploads/background_picture/default.jpeg" />
+					<p>Hola <b>${fullname.split(" ")[0]}</b>, ya puedes ingresar a nuestra app y disfruta el viaje <a href="https://social-network-chi.vercel.app/">Henry Network</a> </p>
+					<h3>Te Esperamos<h3>
+					<p style="font-size: 11px; text-align: center;" >Henryverse 2022</p>
+					</div>
+					`
+                };
+                transporter.sendMail(mailOptions, (error, info)=>error? console.log(error) : console.log('Email enviado: '+info.response));
+                
             await auth.save()
             return res.json({message: `${email} autorizado`})
         }
@@ -108,6 +124,7 @@ const newAutorization = async (req, res, next)=>{
         console.log(error)
         res.json(error)
     }
+
 }
 
 const getAutorization = async (req, res, next)=>{
